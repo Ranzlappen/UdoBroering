@@ -151,7 +151,7 @@ DATE: 2026-04-02
   var postsCarousel = document.getElementById('posts-carousel');
 
   if (viewGrid && viewList) {
-    var saved = localStorage.getItem('viewMode') || 'carousel';
+    var saved = localStorage.getItem('viewMode') || 'grid';
     applyView(saved);
 
     viewGrid.addEventListener('click', function () { applyView('grid'); });
