@@ -9,8 +9,12 @@ title: "Your Blog Name"
 tagline: "Projects, Curiosities & Everything In Between"
 description: "A personal blog about passion projects, random experiments, and whatever catches my attention."
 url: "https://ranzlappen.github.io"
-baseurl: "/udobroering"
-repository: "Ranzlappen/udobroering"
+# baseurl MUST match the repository name's exact case — GitHub Pages serves a
+# project site at https://<user>.github.io/<Repo>/ and those paths are
+# case-sensitive. The repo is "UdoBroering", so a lowercase baseurl would 404
+# every CSS/JS asset (white page). If you rename the repo, update this too.
+baseurl: "/UdoBroering"
+repository: "Ranzlappen/UdoBroering"
 
 # Author / identity — leave social handles blank to hide their footer icons.
 author:
