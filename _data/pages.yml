@@ -17,32 +17,27 @@
   menu: [main]
   order: 1
 
-- title: "Blog"
-  url: "/blog/"
+- title: "Articles"
+  url: "/articles/"
   menu: [main]
   order: 2
-
-- title: "Projects"
-  url: "/projects/"
-  menu: [main]
-  order: 3
 
 - title: "Categories"
   url: "/categories/"
   menu: [main]
-  order: 4
+  order: 3
 
 - title: "About"
   url: "/about/"
   menu: [main, footer]
-  order: 5
+  order: 4
 
 - title: "Disclaimer"
   url: "/disclaimer/"
   menu: [footer]
-  order: 6
+  order: 5
 
 - title: "Privacy Policy"
   url: "/privacy/"
   menu: [footer]
-  order: 7
+  order: 6
