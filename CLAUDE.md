@@ -22,7 +22,7 @@ JavaScript framework — `assets/js/*.js` are small vanilla-JS enhancements.
 
 ```bash
 bundle install
-bundle exec jekyll serve        # local dev server (baseurl /UdoBroering)
+bundle exec jekyll serve        # local dev server at http://localhost:4000/
 bundle exec jekyll build        # production build into _site/
 ```
 
@@ -32,11 +32,12 @@ bundle exec jekyll build        # production build into _site/
   live in `_config.yml`. Templates, SEO/OG tags, the feed, and the manifest all read
   these — there is no hardcoded site name in templates. The `/icons/` set and
   `assets/images/icon_alpha.png` (header logo) are **placeholders** to replace.
-- **Hosting**: GitHub Pages **project site** — `url: https://ranzlappen.github.io`,
-  `baseurl: /UdoBroering` (must match the repo name's exact case — GitHub Pages
-  paths are case-sensitive, so a lowercase baseurl 404s every asset). `sw.js` and
-  `site.webmanifest` are baseurl-aware. To move
-  to a custom domain, clear `baseurl`, update `url`, add a `CNAME`.
+- **Hosting**: custom apex domain **`udobroering.de`** (`CNAME` file) — served at the
+  domain root, so `url: https://udobroering.de` and `baseurl: ""`. `sw.js` and
+  `site.webmanifest` are baseurl-aware. If you ever drop the custom domain and serve
+  from `https://ranzlappen.github.io/UdoBroering/` again, set `baseurl: /UdoBroering`
+  (must match the repo name's exact case — GitHub Pages paths are case-sensitive, so a
+  wrong-case baseurl 404s every asset).
 - **Post status**: `status` front-matter field — `published` (default), `draft`,
   `placeholder`, `unpublished`. Only `published` and `placeholder` appear in the
   feed (`feed.xml`) and sitemap (`sitemap.xml`).

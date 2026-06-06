@@ -8,12 +8,12 @@
 title: "Your Blog Name"
 tagline: "Projects, Curiosities & Everything In Between"
 description: "A personal blog about passion projects, random experiments, and whatever catches my attention."
-url: "https://ranzlappen.github.io"
-# baseurl MUST match the repository name's exact case — GitHub Pages serves a
-# project site at https://<user>.github.io/<Repo>/ and those paths are
-# case-sensitive. The repo is "UdoBroering", so a lowercase baseurl would 404
-# every CSS/JS asset (white page). If you rename the repo, update this too.
-baseurl: "/UdoBroering"
+url: "https://udobroering.de"
+# Custom apex domain (see the CNAME file) — GitHub Pages serves the site at the
+# domain root, so baseurl is empty. (If you ever drop the custom domain and serve
+# from https://ranzlappen.github.io/UdoBroering/ again, set baseurl: "/UdoBroering"
+# — it must match the repo name's exact case or every CSS/JS asset 404s = white page.)
+baseurl: ""
 repository: "Ranzlappen/UdoBroering"
 
 # Author / identity — leave social handles blank to hide their footer icons.

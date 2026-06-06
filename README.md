@@ -12,7 +12,7 @@ No external apps, no Firebase, no comments backend, no branding yet.
 
 ```bash
 bundle install
-bundle exec jekyll serve        # http://localhost:4000/UdoBroering/
+bundle exec jekyll serve        # http://localhost:4000/
 ```
 
 ## Make it yours
@@ -20,11 +20,11 @@ bundle exec jekyll serve        # http://localhost:4000/UdoBroering/
 1. **Identity** — edit `_config.yml`: `title`, `tagline`, `description`, and
    `author.*` (leave a social handle blank to hide its footer icon). All templates,
    SEO tags, the feed, and the manifest read from these variables.
-2. **Hosting** — `url`/`baseurl` are set for a GitHub Pages **project site**
-   (`https://ranzlappen.github.io/UdoBroering/`). **`baseurl` must match the repo
-   name's exact case** — GitHub Pages paths are case-sensitive, so a lowercase
-   `baseurl` would 404 every asset (white page). To use a custom domain later, set
-   `baseurl: ""`, update `url`, and add a `CNAME` file.
+2. **Hosting** — served from the custom apex domain **`udobroering.de`** (see the
+   `CNAME` file), so `url: https://udobroering.de` and `baseurl: ""` (root). If you
+   ever drop the custom domain and serve from `https://ranzlappen.github.io/UdoBroering/`
+   instead, set `baseurl: "/UdoBroering"` — it must match the repo name's exact case,
+   since GitHub Pages paths are case-sensitive (a wrong-case baseurl 404s every asset).
 3. **Icons** — the files in `/icons/` (and `assets/images/icon_alpha.png`, the header
    logo) are **placeholders**. Replace them with your own brand art (same filenames).
 4. **First post** — `_posts/2026-06-06-welcome-to-your-new-blog.md` is a blueprint

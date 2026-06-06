@@ -2,15 +2,15 @@
   "name": "Your Blog Name",
   "short_name": "Blog",
   "description": "A personal blog about passion projects, random experiments, and whatever catches my attention.",
-  "start_url": "/UdoBroering/",
-  "scope": "/UdoBroering/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0f1714",
   "theme_color": "#4ade80",
   "icons": [
-    { "src": "/UdoBroering/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/UdoBroering/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/UdoBroering/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "/UdoBroering/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
