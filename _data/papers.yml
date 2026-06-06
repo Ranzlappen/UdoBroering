@@ -1,0 +1,14 @@
+# Optional metadata for the PDFs in assets/papers/, keyed by the exact PDF
+# filename. The /papers/ page lists every PDF in that folder automatically —
+# just drop a file in and it appears. Add an entry here only when you want a
+# nicer title, authors, date, or abstract than the bare filename.
+#
+# Tip: name files like  YYYY-MM-DD-short-title.pdf  so they sort newest-first.
+
+"2026-06-06-sample-paper.pdf":
+  title: "Sample Paper Title"
+  authors: "Udo Bröring"
+  date: 2026-06-06
+  description: >-
+    A short abstract or summary of the paper. Replace this entry — and the
+    PDF in assets/papers/ — with a real publication.

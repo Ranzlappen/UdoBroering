@@ -52,6 +52,11 @@ bundle exec jekyll build        # production build into _site/
   header, mobile nav, and footer. `menu: [main]`, `[footer]`, or `[main, footer]`.
 - **Series**: define in `_data/series.yml`; a post opts in with `series:` +
   `series_order:` and gets a “Part X of Y” navigator (`_includes/series-nav.html`).
+- **Papers (PDFs)**: `pages/papers.html` (`/papers/`) auto-lists every PDF in
+  `assets/papers/` by iterating `site.static_files` — drop a PDF in and it appears
+  (name it `YYYY-MM-DD-title.pdf` to sort newest-first). Optional richer metadata
+  (`title`, `authors`, `date`, `description`) lives in `_data/papers.yml`, keyed by
+  the exact PDF filename; without an entry the bare filename is used.
 - **Search**: `Ctrl/Cmd+K` modal (`_includes/search-modal.html` + `assets/js/search.js`)
   runs **client-side Lunr** over **`_posts` only**, indexed by the Liquid-generated
   `search.json`. It loads Lunr from a CDN behind the functional-cookie consent gate —
@@ -85,15 +90,17 @@ deploys to GitHub Pages on push to `main` (and `workflow_dispatch`). One-time se
 ├── _config.yml              # Config + identity variables
 ├── _data/
 │   ├── pages.yml            # Navigation registry (nav + footer)
-│   └── series.yml           # Post series definitions
+│   ├── series.yml           # Post series definitions
+│   └── papers.yml           # Optional metadata for PDFs in assets/papers/
 ├── _includes/               # head, header, footer, hero, search-modal,
 │                            #   post-card, post-list-item, series-nav, toc
 ├── _layouts/                # default, home, page, post
 ├── _posts/                  # Blog content (Markdown)
-├── pages/                   # blog, projects, categories, tags, about, privacy, disclaimer
+├── pages/                   # articles, papers, projects, categories, tags, about, privacy, disclaimer
 ├── assets/
 │   ├── css/                 # style.css, cookie-consent.css
-│   ├── js/                  # main, cookie-consent, search, carousel, charts, read-aloud
+│   ├── js/                  # main, cookie-consent, search, carousel, charts, read-aloud, share
+│   ├── papers/              # Published PDFs (auto-listed at /papers/)
 │   └── images/              # icon_alpha.png (logo) + per-post hero dirs
 ├── icons/                   # Favicons + PWA icons (placeholders)
 ├── feed.xml sitemap.xml search.json robots.txt

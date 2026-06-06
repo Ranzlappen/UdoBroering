@@ -52,17 +52,38 @@ status: published          # published | draft | placeholder | unpublished
   ~1280px wide, ≤50 KB (`cwebp -q 80 -m 6 -metadata none in.png -o out.webp`).
 - **Series**: define one in `_data/series.yml`, then set `series:`/`series_order:`.
 
+## Publishing a paper (PDF)
+
+The **Papers** section (`/papers/`) auto-lists every PDF in `assets/papers/`:
+
+1. Drop your PDF into **`assets/papers/`** — name it `YYYY-MM-DD-short-title.pdf`
+   so papers sort newest-first. That's it; it appears on `/papers/` automatically.
+2. *(Optional)* add a nicer title, authors, date, and abstract by keying an entry
+   to the **exact filename** in **`_data/papers.yml`**:
+
+   ```yaml
+   "2026-06-06-my-paper.pdf":
+     title: "A Better Title Than the Filename"
+     authors: "Udo Bröring"
+     date: 2026-06-06
+     description: "Short abstract shown under the title."
+   ```
+
+   Without an entry, the paper still lists using its filename.
+
 ## Project structure
 
 ```
 _config.yml          # Site config + identity variables
 _data/pages.yml      # Nav + footer registry (single source of truth)
 _data/series.yml     # Post series definitions
+_data/papers.yml     # Optional metadata for the PDFs in assets/papers/
 _layouts/            # default, home, page, post
 _includes/           # head, header, footer, hero, search-modal, cards, toc, series-nav
 _posts/              # Your Markdown posts
-pages/               # Static pages (blog, projects, categories, tags, about, privacy, disclaimer)
-assets/css|js|images # style.css + cookie-consent.css; main/search/carousel/charts/read-aloud JS
+pages/               # Static pages (articles, papers, projects, categories, tags, about, privacy, disclaimer)
+assets/papers/       # Published PDFs (auto-listed at /papers/)
+assets/css|js|images # style.css + cookie-consent.css; main/search/carousel/charts/read-aloud/share JS
 icons/               # Favicons + PWA icons (placeholders — replace)
 feed.xml sitemap.xml search.json robots.txt site.webmanifest sw.js offline.html 404.html
 ```

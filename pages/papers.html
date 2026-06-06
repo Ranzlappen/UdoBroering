@@ -1,0 +1,57 @@
+---
+layout: default
+title: Papers
+subtitle: Published papers, available as PDF
+permalink: /papers/
+---
+
+<header class="page-header">
+  <h1>{{ page.title }}</h1>
+  {% if page.subtitle %}<p>{{ page.subtitle }}</p>{% endif %}
+</header>
+
+<div class="page-body">
+  {%- comment -%}
+    Auto-list every PDF in assets/papers/. Drop a PDF in that folder and it
+    shows up here — no edits needed. Optional richer metadata (title, authors,
+    date, abstract) comes from _data/papers.yml, keyed by the PDF filename.
+    Files sort by name, descending, so a YYYY-MM-DD- prefix = newest first.
+  {%- endcomment -%}
+  {% assign in_folder = site.static_files | where_exp: "f", "f.path contains '/assets/papers/'" %}
+  {% assign pdfs = in_folder | where: "extname", ".pdf" | sort: "name" | reverse %}
+
+  {% if pdfs.size > 0 %}
+  <ul class="papers-list">
+    {% for file in pdfs %}
+      {% assign meta = site.data.papers[file.name] %}
+      <li class="paper-card">
+        <div class="paper-card__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <path d="M14 2v6h6"/>
+            <path d="M9 13h6M9 17h6"/>
+          </svg>
+        </div>
+        <div class="paper-card__body">
+          <h2 class="paper-card__title">
+            <a href="{{ file.path | relative_url }}" target="_blank" rel="noopener">{{ meta.title | default: file.basename }}</a>
+          </h2>
+          <div class="paper-card__meta">
+            {% if meta.authors %}<span>{{ meta.authors }}</span>{% endif %}
+            {% if meta.date %}<span>{{ meta.date | date: "%B %-d, %Y" }}</span>{% endif %}
+          </div>
+          {% if meta.description %}<p class="paper-card__desc">{{ meta.description }}</p>{% endif %}
+        </div>
+        <a class="paper-card__download" href="{{ file.path | relative_url }}" download aria-label="Download {{ meta.title | default: file.basename }} (PDF)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          <span>PDF</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="papers-empty">No papers published yet — check back soon.</p>
+  {% endif %}
+</div>
