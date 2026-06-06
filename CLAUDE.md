@@ -1,0 +1,107 @@
+# udobroering — Jekyll blog
+
+A minimal personal blog built with **Jekyll** and hosted on GitHub Pages. This is a
+clean, blog-only fork of a larger multi-app site: no PolyVote, no Blog Admin, no
+Inventory Manager, no Firebase, no Giscus comments, no search crawler, and no
+branding yet (identity is driven by `_config.yml` variables).
+
+## Architecture
+
+A single Jekyll static site. There is no build step beyond Jekyll itself and no
+JavaScript framework — `assets/js/*.js` are small vanilla-JS enhancements.
+
+- **Content**: posts in `_posts/`, static pages in `pages/`.
+- **Templates**: layouts in `_layouts/` (`default`, `home`, `page`, `post`),
+  partials in `_includes/`.
+- **Config & data**: `_config.yml`; navigation in `_data/pages.yml`; series in
+  `_data/series.yml`.
+- **Styling**: one main stylesheet `assets/css/style.css` (+ `cookie-consent.css`),
+  CSS-custom-property driven, with a dark (default) / light theme toggle.
+
+## Build & Development
+
+```bash
+bundle install
+bundle exec jekyll serve        # local dev server (baseurl /udobroering)
+bundle exec jekyll build        # production build into _site/
+```
+
+## Key conventions
+
+- **Identity is variable-driven**: `title`, `tagline`, `description`, and `author.*`
+  live in `_config.yml`. Templates, SEO/OG tags, the feed, and the manifest all read
+  these — there is no hardcoded site name in templates. The `/icons/` set and
+  `assets/images/icon_alpha.png` (header logo) are **placeholders** to replace.
+- **Hosting**: GitHub Pages **project site** — `url: https://ranzlappen.github.io`,
+  `baseurl: /udobroering`. `sw.js` and `site.webmanifest` are baseurl-aware. To move
+  to a custom domain, clear `baseurl`, update `url`, add a `CNAME`.
+- **Post status**: `status` front-matter field — `published` (default), `draft`,
+  `placeholder`, `unpublished`. Only `published` and `placeholder` appear in the
+  feed (`feed.xml`) and sitemap (`sitemap.xml`).
+- **Post categories**: singular `category:` field. The exact string `"Projects"`
+  routes a post to `/projects/`; everything else lands on `/blog/`. Liquid `==` is
+  case-sensitive — keep the casing.
+- **Post hero images**: `image:` (card cover, 600×340) and `backdrop:` (parallax
+  hero) live at `/assets/images/<slug>/<slug>-hero.webp` — genuine WebP, ~1280px,
+  ≤50 KB (`cwebp -q 80 -m 6 -metadata none in.png -o out.webp`). SVG heroes are fine
+  as-is. The homepage warms the browser cache with these (see `_layouts/home.html`).
+- **Navigation**: centralized in `_data/pages.yml` — single source of truth for the
+  header, mobile nav, and footer. `menu: [main]`, `[footer]`, or `[main, footer]`.
+- **Series**: define in `_data/series.yml`; a post opts in with `series:` +
+  `series_order:` and gets a “Part X of Y” navigator (`_includes/series-nav.html`).
+- **Search**: `Ctrl/Cmd+K` modal (`_includes/search-modal.html` + `assets/js/search.js`)
+  runs **client-side Lunr** over **`_posts` only**, indexed by the Liquid-generated
+  `search.json`. It loads Lunr from a CDN behind the functional-cookie consent gate —
+  keep it that way; do not add a query-time third-party search service.
+- **Privacy-first**: no analytics, no first-party cookies, no Firebase/Giscus. The
+  only consent-gated third parties are the Lunr CDN (search) and the Chart.js CDN
+  (charts on posts). GDPR cookie consent with a functional category.
+- **Theme**: dark is default; a CSS-custom-property light mode toggles via
+  `<html data-theme>`. A header pin/unpin toggle controls header stickiness.
+- **PWA**: installable (`site.webmanifest`, `display: standalone`) with a
+  hand-written `sw.js` (precache shell + `offline.html`; cache-first static,
+  network-first navigations). Bump `CACHE_VERSION` in `sw.js` when the shell changes.
+
+## SEO
+
+`jekyll-seo-tag` (`{% seo %}` in `_includes/head.html`) plus hand-rolled extras:
+Open Graph + Twitter cards, canonical, JSON-LD (`WebSite` in head; `BlogPosting` +
+`BreadcrumbList` in `_layouts/post.html`), a custom status-filtered `sitemap.xml`
+and Atom `feed.xml`, and `robots.txt`.
+
+## Deployment & CI/CD
+
+One workflow: `.github/workflows/jekyll-gh-pages.yml` — builds with Jekyll and
+deploys to GitHub Pages on push to `main` (and `workflow_dispatch`). One-time setup:
+*Settings → Pages → Source: GitHub Actions*. `.github/dependabot.yml` keeps the
+`bundler` and `github-actions` ecosystems updated weekly.
+
+## Project structure
+
+```
+├── _config.yml              # Config + identity variables
+├── _data/
+│   ├── pages.yml            # Navigation registry (nav + footer)
+│   └── series.yml           # Post series definitions
+├── _includes/               # head, header, footer, hero, search-modal,
+│                            #   post-card, post-list-item, series-nav, toc
+├── _layouts/                # default, home, page, post
+├── _posts/                  # Blog content (Markdown)
+├── pages/                   # blog, projects, categories, tags, about, privacy, disclaimer
+├── assets/
+│   ├── css/                 # style.css, cookie-consent.css
+│   ├── js/                  # main, cookie-consent, search, carousel, charts, read-aloud
+│   └── images/              # icon_alpha.png (logo) + per-post hero dirs
+├── icons/                   # Favicons + PWA icons (placeholders)
+├── feed.xml sitemap.xml search.json robots.txt
+├── site.webmanifest sw.js offline.html 404.html index.html
+└── .github/
+    ├── dependabot.yml
+    └── workflows/jekyll-gh-pages.yml
+```
+
+## Post-task self-check
+
+After a change, scan whether it should be reflected in `README.md`, `CLAUDE.md`, the
+workflow, or `dependabot.yml` (new conventions, scripts, paths). Auto-apply small
+unambiguous doc updates; prompt for anything structural. Skip for pure Q&A.

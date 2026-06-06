@@ -1,0 +1,102 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="{{ page.description | default: site.description | strip_html | truncatewords: 50 }}">
+<meta name="author" content="{{ site.author.name }}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="{{ page.title | default: site.title }}">
+<meta property="og:description" content="{{ page.description | default: page.excerpt | default: site.description | strip_html | truncatewords: 50 }}">
+<meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:site_name" content="{{ site.title }}">
+{% if page.image %}<meta property="og:image" content="{{ page.image | absolute_url }}">{% endif %}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page.title | default: site.title }}">
+<meta name="twitter:description" content="{{ page.description | default: page.excerpt | default: site.description | strip_html | truncatewords: 50 }}">
+{% if site.author.twitter %}<meta name="twitter:creator" content="{{ site.author.twitter }}">{% endif %}
+{% if page.image %}<meta name="twitter:image" content="{{ page.image | absolute_url }}">{% endif %}
+
+<!-- Favicon & Manifest -->
+<link rel="icon" href="{{ '/icons/favicon.ico' | relative_url }}" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ '/icons/favicon-32x32.png' | relative_url }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ '/icons/favicon-16x16.png' | relative_url }}">
+<link rel="apple-touch-icon" href="{{ '/icons/apple-touch-icon.png' | relative_url }}">
+<link rel="manifest" href="{{ '/site.webmanifest' | relative_url }}">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="{{ site.title }}">
+
+<!-- Service worker (installable PWA, offline-capable) -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('{{ '/sw.js' | relative_url }}').catch(function () {});
+    });
+  }
+</script>
+
+<!-- RSS (Atom feed) -->
+<link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ '/feed.xml' | relative_url }}">
+
+<!-- Canonical -->
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+
+<!-- Preconnect to third-party origins (search loads Lunr.js from unpkg) -->
+<link rel="dns-prefetch" href="https://unpkg.com">
+
+<!-- Base URL for JS -->
+<meta name="baseurl" content="{{ site.baseurl }}">
+
+<!-- JSON-LD: WebSite -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ site.title | xml_escape }}",
+  "url": "{{ '/' | absolute_url }}",
+  "description": "{{ site.description | xml_escape }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ site.author.name | xml_escape }}"
+  }
+}
+</script>
+
+<!-- CSS -->
+<link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/cookie-consent.css' | relative_url }}">
+
+<!-- Theme: apply saved preference before paint to prevent flash -->
+<!-- Cookie consent: read saved state before any scripts run -->
+<script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+
+    // Header stickiness preference. Default is sticky ("on"); only the explicit
+    // "off" value collapses it, applied before paint so the header doesn't flash
+    // fixed-then-static on load.
+    if (localStorage.getItem('headerSticky') === 'off') {
+      document.documentElement.setAttribute('data-header-sticky', 'off');
+    }
+
+    // Bootstrap consent state synchronously so other scripts can check it
+    var CC_KEY = 'cookie_consent', CC_VER = 1, CC_EXP = 365;
+    try {
+      var d = JSON.parse(localStorage.getItem(CC_KEY));
+      if (d && d.version === CC_VER && (Date.now() - d.timestamp) < CC_EXP * 86400000) {
+        window.__cookieConsent = { functional: !!d.functional, resolved: true };
+        if (d.functional) document.documentElement.classList.add('consent-functional');
+      } else {
+        window.__cookieConsent = { functional: false, resolved: false };
+      }
+    } catch(e) {
+      window.__cookieConsent = { functional: false, resolved: false };
+    }
+  })();
+</script>
+
+{% seo %}

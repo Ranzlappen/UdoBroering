@@ -1,0 +1,10 @@
+# Blog post series definitions
+# Posts reference a series by its `id` in front matter, e.g.:
+#   series: "getting-started"
+#   series_order: 1
+# The series navigation block (_includes/series-nav.html) renders a
+# "Part X of Y" header + a list of every post sharing the same id.
+
+- id: "getting-started"
+  title: "Getting Started"
+  description: "An example series — group related posts by giving them the same `series` id."

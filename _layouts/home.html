@@ -1,0 +1,111 @@
+---
+layout: default
+# Landing page is a lean "hub": the hero + three buttons (Blog / Projects /
+# References) only — no article cards are linked here, to keep the first paint
+# fast and the next click cheap. After the page finishes loading we warm the
+# browser cache with every post's hero/cover image (see the preloader below) so
+# the Blog / Projects pages render their images near-instantly.
+---
+
+{% include hero.html %}
+
+{% comment %}
+  Hero/cover image preload list — every published/placeholder post's `image`
+  (the card cover shown on /blog/ and /projects/) plus its `backdrop` (the
+  parallax hero on the post page). Deduped again in JS. First-party, same-origin
+  images only, so no consent gate is needed.
+{% endcomment %}
+<script>
+  window.__heroPreload = [
+  {%- for post in site.posts -%}
+    {%- if post.status == "published" or post.status == "placeholder" -%}
+      {%- if post.image %}"{{ post.image | relative_url }}",{% endif -%}
+      {%- if post.backdrop and post.backdrop != post.image %}"{{ post.backdrop | relative_url }}",{% endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  ];
+</script>
+<script>
+  // Warm the browser cache with the category/post hero images AFTER the landing
+  // page has loaded, while the browser is idle. The images aren't shown here, so
+  // this is pure prefetch: clicking through to Blog / Projects (or a post) then
+  // paints the covers/backdrops from cache.
+  //
+  // Three rules keep this from ever getting in the visitor's way:
+  //   1. It only starts after `load`, during an idle slice.
+  //   2. It fetches at most 3 images at a time at the lowest priority, so it
+  //      never saturates the connection pool — there's little for a real
+  //      navigation to queue behind, and it doesn't re-trigger the loading bar.
+  //   3. The moment the page is being left (`pagehide`), it stops the queue and
+  //      cancels every in-flight request, handing all bandwidth to the next page.
+  (function () {
+    var imgs = window.__heroPreload || [];
+    if (!imgs.length) return;
+
+    // Respect Data Saver / very slow links — don't burn metered data prefetching
+    // images the visitor may never see.
+    var conn = navigator.connection || navigator.webkitConnection;
+    if (conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''))) return;
+
+    // Dedupe (newest-first order is preserved), then cap to the 20 newest
+    // pictures so a growing archive can't turn this into a heavy prefetch.
+    var seen = Object.create(null);
+    var queue = [];
+    for (var i = 0; i < imgs.length && queue.length < 20; i++) {
+      var src = imgs[i];
+      if (src && !seen[src]) { seen[src] = true; queue.push(src); }
+    }
+    if (!queue.length) return;
+
+    var CONCURRENCY = 3;
+    var stopped = false;
+    var inFlight = [];   // images currently loading, so stop() can cancel them
+    var idx = 0;
+
+    function loadOne() {
+      if (stopped || idx >= queue.length) return;
+      var img = new Image();
+      if ('fetchPriority' in img) img.fetchPriority = 'low'; // deprioritize vs. navigation
+      img.decoding = 'async';
+      img.onload = img.onerror = function () {
+        img.onload = img.onerror = null;
+        var at = inFlight.indexOf(img);
+        if (at !== -1) inFlight.splice(at, 1);
+        loadOne(); // refill the slot only after this one settles — pool of 3
+      };
+      inFlight.push(img);
+      idx++;
+      img.src = queue[idx - 1];
+    }
+
+    function pump() {
+      var slots = CONCURRENCY - inFlight.length;
+      for (var k = 0; k < slots; k++) loadOne();
+    }
+
+    function stop() {
+      if (stopped) return;
+      stopped = true;
+      inFlight.forEach(function (img) {
+        img.onload = img.onerror = null;
+        img.src = ''; // cancel the in-flight image request
+      });
+      inFlight.length = 0;
+    }
+
+    // Cancel as the visitor leaves so a click never waits on prefetch traffic.
+    window.addEventListener('pagehide', stop);
+
+    function start() {
+      if (stopped) return;
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(pump, { timeout: 3000 });
+      } else {
+        setTimeout(pump, 1200);
+      }
+    }
+
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+  })();
+</script>

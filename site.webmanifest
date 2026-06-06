@@ -1,0 +1,16 @@
+{
+  "name": "Your Blog Name",
+  "short_name": "Blog",
+  "description": "A personal blog about passion projects, random experiments, and whatever catches my attention.",
+  "start_url": "/udobroering/",
+  "scope": "/udobroering/",
+  "display": "standalone",
+  "background_color": "#0f1714",
+  "theme_color": "#4ade80",
+  "icons": [
+    { "src": "/udobroering/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/udobroering/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/udobroering/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/udobroering/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

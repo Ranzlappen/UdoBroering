@@ -1,0 +1,18 @@
+---
+layout: null
+# Local search index: blog posts only. Each entry carries the fields the
+# Ctrl/Cmd+K search modal (assets/js/search.js) feeds to Lunr. No pages,
+# no external crawl — the search bar only looks inside _posts.
+---
+[
+  {% assign first = true %}
+  {% for post in site.posts %}{% if post.status == "published" or post.status == "placeholder" %}{% unless first %},{% endunless %}{% assign first = false %}
+  {
+    "title": {{ post.title | jsonify }},
+    "url": "{{ post.url | relative_url }}",
+    "content": {{ post.content | strip_html | normalize_whitespace | truncatewords: 200 | jsonify }},
+    "date": "{{ post.date | date: '%Y-%m-%d' }}",
+    "category": {{ post.category | default: "" | jsonify }},
+    "tags": {{ post.tags | join: " " | jsonify }}
+  }{% endif %}{% endfor %}
+]

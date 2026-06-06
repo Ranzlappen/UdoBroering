@@ -1,0 +1,65 @@
+# ============================================================
+# Site Settings
+#
+# Branding placeholders — set these once and the values flow to every
+# template, the SEO/OG tags, the feed, the sitemap, and the manifest.
+# Replace "Your Blog Name" / social handles when you're ready to brand.
+# ============================================================
+title: "Your Blog Name"
+tagline: "Projects, Curiosities & Everything In Between"
+description: "A personal blog about passion projects, random experiments, and whatever catches my attention."
+url: "https://ranzlappen.github.io"
+baseurl: "/udobroering"
+repository: "Ranzlappen/udobroering"
+
+# Author / identity — leave social handles blank to hide their footer icons.
+author:
+  name: "Udo Bröring"
+  email: ""
+  github: ""
+  twitter: ""
+  linkedin: ""
+  discord: ""
+  reddit: ""
+  youtube: ""
+  steam: ""
+
+# Build
+markdown: kramdown
+kramdown:
+  input: GFM
+  auto_ids: true
+  syntax_highlighter: rouge
+
+permalink: /blog/:year/:month/:day/:title/
+paginate: 9
+paginate_path: "/blog/page:num/"
+
+# Collections & Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      status: "published"
+  - scope:
+      path: "pages"
+      type: "pages"
+    values:
+      layout: "page"
+
+# Exclude from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - README.md
+  - LICENSE
+  - .gitignore
+  - vendor
+
+# Plugins (GitHub Pages compatible)
+plugins:
+  - jekyll-seo-tag
+  - jekyll-paginate
