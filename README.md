@@ -12,7 +12,7 @@ No external apps, no Firebase, no comments backend, no branding yet.
 
 ```bash
 bundle install
-bundle exec jekyll serve        # http://localhost:4000/udobroering/
+bundle exec jekyll serve        # http://localhost:4000/UdoBroering/
 ```
 
 ## Make it yours
@@ -21,7 +21,9 @@ bundle exec jekyll serve        # http://localhost:4000/udobroering/
    `author.*` (leave a social handle blank to hide its footer icon). All templates,
    SEO tags, the feed, and the manifest read from these variables.
 2. **Hosting** — `url`/`baseurl` are set for a GitHub Pages **project site**
-   (`https://ranzlappen.github.io/udobroering/`). To use a custom domain later, set
+   (`https://ranzlappen.github.io/UdoBroering/`). **`baseurl` must match the repo
+   name's exact case** — GitHub Pages paths are case-sensitive, so a lowercase
+   `baseurl` would 404 every asset (white page). To use a custom domain later, set
    `baseurl: ""`, update `url`, and add a `CNAME` file.
 3. **Icons** — the files in `/icons/` (and `assets/images/icon_alpha.png`, the header
    logo) are **placeholders**. Replace them with your own brand art (same filenames).

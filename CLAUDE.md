@@ -22,7 +22,7 @@ JavaScript framework — `assets/js/*.js` are small vanilla-JS enhancements.
 
 ```bash
 bundle install
-bundle exec jekyll serve        # local dev server (baseurl /udobroering)
+bundle exec jekyll serve        # local dev server (baseurl /UdoBroering)
 bundle exec jekyll build        # production build into _site/
 ```
 
@@ -33,7 +33,9 @@ bundle exec jekyll build        # production build into _site/
   these — there is no hardcoded site name in templates. The `/icons/` set and
   `assets/images/icon_alpha.png` (header logo) are **placeholders** to replace.
 - **Hosting**: GitHub Pages **project site** — `url: https://ranzlappen.github.io`,
-  `baseurl: /udobroering`. `sw.js` and `site.webmanifest` are baseurl-aware. To move
+  `baseurl: /UdoBroering` (must match the repo name's exact case — GitHub Pages
+  paths are case-sensitive, so a lowercase baseurl 404s every asset). `sw.js` and
+  `site.webmanifest` are baseurl-aware. To move
   to a custom domain, clear `baseurl`, update `url`, add a `CNAME`.
 - **Post status**: `status` front-matter field — `published` (default), `draft`,
   `placeholder`, `unpublished`. Only `published` and `placeholder` appear in the
