@@ -28,7 +28,7 @@ each field does:
 | `description` | ✅ | Meta description, card blurb, and feed summary. Keep it under ~155 chars. |
 | `keywords` | — | SEO keyword array. |
 | `date` | ✅ | `YYYY-MM-DD`. Drives the URL and sort order. |
-| `category` | ✅ | A single string. **`"Projects"`** (exact case) routes the post to `/projects/`; anything else lands on `/blog/`. |
+| `category` | ✅ | A single string. **`"Projects"`** (exact case) routes the post to `/projects/`; anything else lands on `/articles/`. |
 | `tags` | — | Array of tags. Each becomes a filter on `/tags/`. |
 | `image` | — | Card cover, rendered 600×340. Convention: `/assets/images/<slug>/<slug>-hero.*`. |
 | `backdrop` | — | Full-bleed parallax hero at the top of the post page. Usually the same file as `image`. |
@@ -38,7 +38,7 @@ each field does:
 ## Categories vs. tags
 
 - **Category** is singular and routes the post. Use `category: "Projects"` to send a
-  post to the `/projects/` page; use anything else (like `"Guides"` here) for `/blog/`.
+  post to the `/projects/` page; use anything else (like `"Guides"` here) for `/articles/`.
 - **Tags** are plural and cross-cutting. They power `/tags/` and the “You might also
   like” related-posts block.
 

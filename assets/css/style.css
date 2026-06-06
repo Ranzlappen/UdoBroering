@@ -1284,6 +1284,38 @@ html[data-header-sticky="off"] .theme-toggle {
   width: 0.9rem;
   height: 0.9rem;
 }
+.post-meta__author {
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+/* Share button (in post meta) */
+.post-share__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--c-surface-alt);
+  border: 1px solid var(--c-border);
+  color: var(--c-text-muted);
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  font: inherit;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: color var(--transition-base), border-color var(--transition-base), background var(--transition-base);
+}
+.post-share__btn:hover,
+.post-share__btn:focus-visible {
+  color: var(--c-accent);
+  border-color: var(--c-accent-border);
+  background: var(--c-surface);
+}
+.post-share__btn.is-copied {
+  color: var(--c-accent);
+  border-color: var(--c-accent-border);
+}
+.post-share__btn svg { width: 0.9rem; height: 0.9rem; }
 
 /* Post Body */
 .post-body {

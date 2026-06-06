@@ -39,7 +39,7 @@ Create `_posts/YYYY-MM-DD-slug.md` with front matter:
 title: "My Post"
 description: "One-line summary used for SEO and cards."
 date: 2026-06-06
-category: "Guides"        # exactly "Projects" → /projects/, anything else → /blog/
+category: "Guides"        # exactly "Projects" → /projects/, anything else → /articles/
 tags: [example, jekyll]
 image: /assets/images/my-post/my-post-hero.webp     # card cover (optional)
 backdrop: /assets/images/my-post/my-post-hero.webp  # parallax hero (optional)

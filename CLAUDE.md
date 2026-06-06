@@ -42,7 +42,7 @@ bundle exec jekyll build        # production build into _site/
   `placeholder`, `unpublished`. Only `published` and `placeholder` appear in the
   feed (`feed.xml`) and sitemap (`sitemap.xml`).
 - **Post categories**: singular `category:` field. The exact string `"Projects"`
-  routes a post to `/projects/`; everything else lands on `/blog/`. Liquid `==` is
+  routes a post to `/projects/`; everything else lands on `/articles/`. Liquid `==` is
   case-sensitive — keep the casing.
 - **Post hero images**: `image:` (card cover, 600×340) and `backdrop:` (parallax
   hero) live at `/assets/images/<slug>/<slug>-hero.webp` — genuine WebP, ~1280px,
