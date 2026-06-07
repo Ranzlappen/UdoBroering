@@ -2854,9 +2854,6 @@ h1, h2, h3, h4, h5, h6,
   color: var(--c-text-muted);
 }
 
-/* Page/post titles: a hairline bronze rule beneath, like a chapter head. */
-.page-header { border-bottom: 1px solid var(--c-border-light); }
-
 /* Category / status chips read as small-caps labels, not pills. */
 .post-header__category, .post-card__category {
   font-family: var(--f-body);
@@ -2951,19 +2948,29 @@ body.has-overview-backdrop::after {
 }
 [data-theme="light"] body.has-overview-backdrop::after { opacity: 0.9; }
 
-/* Page headers / section titles float over the backdrop — give them a
-   soft halo so they stay crisp. (Lists/cards sit on opaque surfaces.) */
-body.has-overview-backdrop .page-header h1,
-body.has-overview-backdrop .page-header p,
-body.has-overview-backdrop .section-title,
-body.has-overview-backdrop .taxonomy-section h2 {
-  text-shadow: 0 1px 16px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.55);
+/* Title gets its own frosted-glass panel over the backdrop, like the cards. */
+body.has-overview-backdrop .page-header,
+body.has-overview-backdrop .section-title {
+  background-color: color-mix(in srgb, var(--c-surface) 72%, transparent);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  backdrop-filter: blur(10px) saturate(1.1);
+  border: 1px solid var(--c-border);
+  border-radius: var(--border-radius-lg);
 }
-[data-theme="light"] body.has-overview-backdrop .page-header h1,
-[data-theme="light"] body.has-overview-backdrop .page-header p,
-[data-theme="light"] body.has-overview-backdrop .section-title,
-[data-theme="light"] body.has-overview-backdrop .taxonomy-section h2 {
-  text-shadow: 0 1px 10px rgba(246,245,242,0.85);
+body.has-overview-backdrop .page-header {
+  padding: var(--space-lg) var(--space-2xl);
+  width: fit-content;
+  max-width: 100%;
+  margin: var(--space-lg) auto var(--space-xl);
+}
+body.has-overview-backdrop .section-title {
+  padding: var(--space-xs) var(--space-md);
+}
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  body.has-overview-backdrop .page-header,
+  body.has-overview-backdrop .section-title {
+    background-color: color-mix(in srgb, var(--c-surface) 92%, transparent);
+  }
 }
 
 /* ============================================================
