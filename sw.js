@@ -7,7 +7,7 @@ layout: null
    No build step, no Workbox. Bump CACHE_VERSION to invalidate. */
 "use strict";
 
-const CACHE_VERSION = "udoblog-v5";
+const CACHE_VERSION = "udoblog-v6";
 const PRECACHE = CACHE_VERSION + "-precache";
 const RUNTIME = CACHE_VERSION + "-runtime";
 
@@ -90,7 +90,24 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Static assets: cache-first, then network (and cache the result).
+  // CSS/JS: network-first (we iterate on these often), so a change shows on the
+  // next load instead of lagging a CACHE_VERSION behind; fall back to cache offline.
+  if (url.pathname.endsWith(".css") || url.pathname.endsWith(".js")) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res && res.status === 200 && res.type === "basic") {
+            const copy = res.clone();
+            caches.open(RUNTIME).then((c) => c.put(req, copy));
+          }
+          return res;
+        })
+        .catch(() => caches.match(req))
+    );
+    return;
+  }
+
+  // Other static assets (images, fonts, etc.): cache-first, then network.
   event.respondWith(
     caches.match(req).then((hit) => {
       if (hit) return hit;

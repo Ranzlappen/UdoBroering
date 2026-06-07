@@ -3674,7 +3674,7 @@ body::before {
 }
 [data-theme="light"] body::before {
   background-image:
-    linear-gradient(180deg, rgba(246,245,242,0.80) 0%, rgba(246,245,242,0.88) 100%),
+    linear-gradient(180deg, rgba(246,245,242,0.34) 0%, rgba(246,245,242,0.54) 100%),
     url('../images/marble-bg.webp');
 }
 
