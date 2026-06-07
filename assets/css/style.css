@@ -2947,8 +2947,12 @@ body.has-overview-backdrop::after {
   opacity: 0.5;
   /* Fade both colonnades out toward the centre for a fluent blend into the
      page background (visible at the outer edges → transparent in the middle). */
-  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 15%, transparent 42%, transparent 58%, #000 85%, #000 100%);
-          mask-image: linear-gradient(to right, #000 0%, #000 15%, transparent 42%, transparent 58%, #000 85%, #000 100%);
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 14%, transparent 40%, transparent 60%, #000 86%, #000 100%);
+          mask-image: linear-gradient(to right, #000 0%, #000 14%, transparent 40%, transparent 60%, #000 86%, #000 100%);
+  -webkit-mask-size: 100% 100%;
+          mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
 }
 [data-theme="light"] body.has-overview-backdrop::after { opacity: 0.9; }
 
