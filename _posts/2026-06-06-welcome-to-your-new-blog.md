@@ -6,7 +6,6 @@ date: 2026-06-06
 category: "Guides"
 tags: [getting-started, jekyll, template]
 image: /assets/images/welcome/welcome-hero.svg
-backdrop: /assets/images/welcome/welcome-hero.svg
 status: published
 series: "getting-started"
 series_order: 1
