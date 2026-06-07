@@ -5,7 +5,7 @@
 # template, the SEO/OG tags, the feed, the sitemap, and the manifest.
 # Replace "Your Blog Name" / social handles when you're ready to brand.
 # ============================================================
-title: "Your Blog Name"
+title: "Udo Bröring"
 tagline: "Essays and papers on the thinkers who shaped how we understand the world."
 description: "Writings on philosophy — the great thinkers of ancient and modern times, their ideas, and why they still matter."
 url: "https://udobroering.de"
@@ -19,7 +19,7 @@ repository: "Ranzlappen/UdoBroering"
 # Author / identity — leave social handles blank to hide their footer icons.
 author:
   name: "Udo Bröring"
-  email: ""
+  email: "contact@udobroering.de"
   github: ""
   twitter: ""
   linkedin: ""

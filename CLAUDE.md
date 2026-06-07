@@ -30,8 +30,8 @@ bundle exec jekyll build        # production build into _site/
 
 - **Identity is variable-driven**: `title`, `tagline`, `description`, and `author.*`
   live in `_config.yml`. Templates, SEO/OG tags, the feed, and the manifest all read
-  these — there is no hardcoded site name in templates. The `/icons/` set and
-  `assets/images/icon_alpha.png` (header logo) are **placeholders** to replace.
+  these — there is no hardcoded site name in templates. The `/icons/` set is a placeholder Φ; the header shows a Φ glyph (no logo image).
+  
 - **Hosting**: custom apex domain **`udobroering.de`** (`CNAME` file) — served at the
   domain root, so `url: https://udobroering.de` and `baseurl: ""`. `sw.js` and
   `site.webmanifest` are baseurl-aware. If you ever drop the custom domain and serve
@@ -113,7 +113,6 @@ deploys to GitHub Pages on push to `main` (and `workflow_dispatch`). One-time se
 │   ├── js/                  # main, cookie-consent, search, carousel, charts, read-aloud, share
 │   ├── fonts/               # Self-hosted serif woff2 (EB Garamond + Cormorant Garamond)
 │   ├── papers/              # Published PDFs (auto-listed at /papers/)
-│   └── images/              # icon_alpha.png (logo) + per-post hero dirs
 ├── icons/                   # Favicons + PWA icons (placeholders)
 ├── feed.xml sitemap.xml search.json robots.txt
 ├── site.webmanifest sw.js offline.html 404.html index.html

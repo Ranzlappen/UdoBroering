@@ -1,7 +1,7 @@
 {
-  "name": "Your Blog Name",
-  "short_name": "Blog",
-  "description": "A personal blog about passion projects, random experiments, and whatever catches my attention.",
+  "name": "Udo Bröring",
+  "short_name": "Udo Bröring",
+  "description": "Writings on philosophy — the great thinkers of ancient and modern times.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

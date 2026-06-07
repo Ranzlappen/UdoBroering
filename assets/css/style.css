@@ -3008,3 +3008,26 @@ body.has-overview-backdrop .section-title {
     background-color: color-mix(in srgb, var(--c-surface) 92%, transparent);
   }
 }
+
+/* Brand mark: a Φ glyph in the display serif, tame bronze. */
+.site-logo__icon {
+  font-family: var(--f-heading);
+  font-size: 1.6rem;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--c-accent);
+}
+
+/* Footer contact email */
+.footer-contact { margin-top: var(--space-xs); }
+.footer-contact__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--c-text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color var(--transition-fast);
+}
+.footer-contact__link:hover { color: var(--c-accent); }
+.footer-contact__link svg { width: 1rem; height: 1rem; }
