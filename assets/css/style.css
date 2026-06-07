@@ -2758,7 +2758,7 @@ html[data-header-sticky="off"] .theme-toggle {
 .post-body[itemprop="articleBody"] h2.is-stuck,
 .page-body h2.is-stuck {
   background: var(--c-bg);
-  box-shadow: 0 1px 0 var(--c-border-light);
+  box-shadow: 0 0px 0 var(--c-border-light);
 }
 
 /* Inner wrapper added by main.js around each sticky h2's content. Scaling
