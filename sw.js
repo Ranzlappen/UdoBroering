@@ -7,7 +7,7 @@ layout: null
    No build step, no Workbox. Bump CACHE_VERSION to invalidate. */
 "use strict";
 
-const CACHE_VERSION = "udoblog-v3";
+const CACHE_VERSION = "udoblog-v4";
 const PRECACHE = CACHE_VERSION + "-precache";
 const RUNTIME = CACHE_VERSION + "-runtime";
 
@@ -19,6 +19,7 @@ const PRECACHE_URLS = [
   "{{ '/assets/js/main.js' | relative_url }}",
   "{{ '/assets/fonts/eb-garamond-latin-400-normal.woff2' | relative_url }}",
   "{{ '/assets/fonts/cormorant-garamond-latin-700-normal.woff2' | relative_url }}",
+  "{{ '/assets/images/marble-bg.webp' | relative_url }}",
   "{{ '/icons/favicon.ico' | relative_url }}",
   "{{ '/icons/favicon-16x16.png' | relative_url }}",
   "{{ '/icons/favicon-32x32.png' | relative_url }}",

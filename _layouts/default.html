@@ -4,7 +4,7 @@
   <title>{% if page.title %}{{ page.title }} — {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
   {% include head.html %}
 </head>
-<body{% if page.layout == 'post' %} class="{% if page.backdrop %}has-backdrop{% endif %}"{% endif %}>
+<body class="{% if page.layout == 'post' and page.backdrop %}has-backdrop {% endif %}{% if page.overview_backdrop %}has-overview-backdrop{% endif %}">
 
   {% include header.html %}
   {% include search-modal.html %}
