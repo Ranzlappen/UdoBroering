@@ -84,6 +84,9 @@ DATE: 2026-04-02
       }
       setThemeIcons();
 
+      var tc = document.querySelector('meta[name="theme-color"]');
+      if (tc) tc.setAttribute('content', next ? '#f6f5f2' : '#16171a');
+
       // Update Giscus theme if loaded
       var giscusFrame = document.querySelector('iframe.giscus-frame');
       if (giscusFrame) {

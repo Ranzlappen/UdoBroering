@@ -65,9 +65,11 @@ bundle exec jekyll build        # production build into _site/
   only consent-gated third parties are the Lunr CDN (search) and the Chart.js CDN
   (charts on posts). GDPR cookie consent with a functional category.
 - **Theme**: "Marble & Ink" — charcoal/marble greys with a bronze accent (and an
-  oxblood secondary, `--c-accent-2`). Dark "study" is default; a CSS-custom-property
-  light "gallery" mode toggles via `<html data-theme>`. Palette + fonts are entirely
-  driven by the `:root` / `[data-theme="light"]` custom properties, so recoloring is
+  oxblood secondary, `--c-accent-2`). **Light "gallery" is the default** (set pre-paint
+  in `_includes/head.html` — `data-theme="light"` unless `localStorage.theme === 'dark'`);
+  a dark "study" mode toggles via `<html data-theme>` (absence of the attribute = dark).
+  The `theme-color` meta + manifest default to the light bg. Palette + fonts are driven
+  by the `:root` (dark base) / `[data-theme="light"]` custom properties, so recoloring is
   centralized. A header pin/unpin toggle controls header stickiness.
 - **Fonts (self-hosted)**: serif throughout — **EB Garamond** (body, `--f-body`) and
   **Cormorant Garamond** (display headings, `--f-heading`), self-hosted as woff2 in

@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#16171a">
+<meta name="theme-color" content="#f6f5f2">
 <meta name="description" content="{{ page.description | default: site.description | strip_html | truncatewords: 50 }}">
 <meta name="author" content="{{ site.author.name }}">
 
@@ -78,8 +78,11 @@
 <!-- Cookie consent: read saved state before any scripts run -->
 <script>
   (function() {
+    // Light "gallery" is the default; only an explicit saved "dark" opts out.
     var t = localStorage.getItem('theme');
-    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    if (t !== 'dark') document.documentElement.setAttribute('data-theme', 'light');
+    var tc = document.querySelector('meta[name="theme-color"]');
+    if (tc) tc.setAttribute('content', t === 'dark' ? '#16171a' : '#f6f5f2');
 
     // Header stickiness preference. Default is sticky ("on"); only the explicit
     // "off" value collapses it, applied before paint so the header doesn't flash
