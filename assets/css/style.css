@@ -76,21 +76,6 @@ DATE: 2026-04-03
   --border-radius-sm: 0.25rem;
   --border-radius-lg: 0.75rem;
 
-  /* ── Carousel tuning ──
-     Adjust these to change how the blog carousel scrolls and feels.
-     See README § "Tune the Blog Carousel" for full guide. */
-  --carousel-gap:         1.5rem; /* space between cards */
-  --carousel-fade-min:    0.3;    /* minimum opacity for off-center cards (0=invisible, 1=no fade) */
-  --carousel-scale-min:   0.88;   /* minimum scale for off-center cards (1=no shrink) */
-  --carousel-tilt-up:     6;      /* rotateX degrees for cards above center */
-  --carousel-tilt-down:   5;      /* rotateX degrees for cards below center */
-  --carousel-focus-range: 0.35;   /* viewport fraction before full effect — lower=snappier */
-  --carousel-bottom-pad:  20vh;   /* bottom space below last card */
-  /* Snap behavior — keyword props, edit on their rules directly:
-     .carousel-active  → scroll-snap-type: y mandatory | proximity
-     .carousel-card    → scroll-snap-align: center | start | end
-     .carousel-card    → scroll-snap-stop: always | normal              */
-
   /* Transitions */
   --transition-fast: 0.15s ease;
   --transition-base: 0.25s ease;
@@ -385,8 +370,7 @@ html[data-header-sticky="off"] .theme-toggle {
   margin-right: calc(2rem + var(--space-sm));
 }
 @media (prefers-reduced-motion: reduce) {
-  html[data-header-sticky="off"] .header-sticky-toggle { transition: none; }
-}
+  html[data-header-sticky="off"] .header-sticky-toggle { transition: none; }}
 
 /* Mobile Menu Toggle */
 .mobile-menu-toggle {
@@ -782,392 +766,6 @@ html[data-header-sticky="off"] .theme-toggle {
   color: var(--c-text-faint);
 }
 
-/* Carousel view — scroll-driven focus */
-@property --carousel-tilt-x {
-  syntax: '<angle>';
-  inherits: true;
-  initial-value: 0deg;
-}
-@property --carousel-scale {
-  syntax: '<number>';
-  inherits: true;
-  initial-value: 1;
-}
-@property --carousel-shadow-depth {
-  syntax: '<number>';
-  inherits: true;
-  initial-value: 0.3;
-}
-
-/* Subtle scrollbar when carousel is active */
-.carousel-active {
-  scrollbar-width: thin;
-  scroll-snap-type: y mandatory;
-  overscroll-behavior-y: auto;
-}
-.carousel-active::-webkit-scrollbar { width: 6px; }
-.carousel-active::-webkit-scrollbar-thumb { background: var(--c-border); border-radius: 3px; }
-.carousel-active::-webkit-scrollbar-track { background: transparent; }
-
-/* Snap the top-level content block so scroll can return to true page top */
-.carousel-active .page-content {
-  scroll-snap-align: start;
-}
-.carousel-active .site-footer {
-  scroll-snap-align: end;
-}
-
-.posts-carousel {
-  padding: var(--space-lg) 0 var(--carousel-bottom-pad, 40vh);
-}
-.posts-carousel[hidden] { display: none; }
-
-.carousel-scene {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--carousel-gap, 3rem);
-  max-width: 46rem;
-  margin: 0 auto;
-}
-
-.carousel-card {
-  width: 100%;
-  min-height: 20rem;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  scroll-snap-align: center;
-  scroll-snap-stop: always;
-}
-
-.carousel-card__link {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  height: 100%;
-  perspective: 1200px;
-  perspective-origin: 50% 50%;
-}
-
-.carousel-card__inner {
-  position: relative;
-  width: 100%;
-  min-height: 20rem;
-  transform:
-    rotateX(var(--carousel-tilt-x, 0deg))
-    scale(var(--carousel-scale, 1));
-  transform-style: preserve-3d;
-  transform-origin: 50% 50%;
-  will-change: transform, opacity;
-}
-
-/* Gentle breathe on focused card */
-@keyframes carousel-breathe {
-  0%, 100% {
-    transform:
-      rotateX(var(--carousel-tilt-x, 0deg))
-      scale(var(--carousel-scale, 1));
-  }
-  50% {
-    transform:
-      rotateX(calc(var(--carousel-tilt-x, 0deg) + 0.4deg))
-      scale(calc(var(--carousel-scale, 1) * 1.003));
-  }
-}
-.carousel-card.is-focused .carousel-card__inner {
-  animation: carousel-breathe 3.5s cubic-bezier(0.37, 0, 0.63, 1) infinite;
-}
-
-/* Hover 3D tilt — only on focused (centered) cards */
-.carousel-card.is-focused:hover .carousel-card__inner {
-  animation: none;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  transform:
-    rotateX(-2deg)
-    rotateY(3deg)
-    scale(1.02);
-}
-
-.carousel-card__face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  border-radius: var(--border-radius-lg);
-  overflow: hidden;
-  background: var(--c-surface);
-  border: 1px solid var(--c-border);
-  box-shadow:
-    0 calc(var(--carousel-shadow-depth, 0.3) * 50px) calc(var(--carousel-shadow-depth, 0.3) * 120px) calc(var(--carousel-shadow-depth, 0.3) * -25px) var(--c-card-shadow),
-    0 calc(var(--carousel-shadow-depth, 0.3) * 18px) calc(var(--carousel-shadow-depth, 0.3) * 50px) -8px rgba(0,0,0,0.16),
-    0 0 0 1px rgba(0,0,0,0.03);
-  transition: box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.6s ease;
-}
-
-/* Multi-layered cinematic glow on focused card */
-@keyframes carousel-glow-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-.carousel-card.is-focused .carousel-card__face {
-  border-color: var(--c-accent-border);
-  box-shadow:
-    0 50px 120px -25px var(--c-card-shadow),
-    0 18px 50px -8px rgba(0,0,0,0.2),
-    0 0 0 1px rgba(74, 222, 128, 0.12),
-    0 0 80px -15px rgba(74, 222, 128, 0.1),
-    0 0 160px -40px rgba(74, 222, 128, 0.05),
-    inset 0 1px 0 0 rgba(255,255,255,0.05);
-  animation: carousel-glow-pulse 4s cubic-bezier(0.37, 0, 0.63, 1) infinite;
-}
-
-/* Prismatic shimmer sweep on focused card front */
-@keyframes carousel-shimmer {
-  0%   { transform: translateX(-100%) skewX(-8deg); }
-  100% { transform: translateX(100%) skewX(-8deg); }
-}
-.carousel-card__front::after {
-  content: '';
-  position: absolute;
-  inset: -20% -10%;
-  background: linear-gradient(
-    105deg,
-    transparent 25%,
-    rgba(255,255,255,0.01) 32%,
-    rgba(255,255,255,0.04) 40%,
-    rgba(255,255,255,0.08) 46%,
-    rgba(255,255,255,0.04) 52%,
-    rgba(255,255,255,0.01) 60%,
-    transparent 67%
-  );
-  opacity: 0;
-  pointer-events: none;
-  z-index: 2;
-  transition: opacity 0.6s ease;
-}
-.carousel-card.is-focused .carousel-card__front::after {
-  opacity: 1;
-  animation: carousel-shimmer 5s cubic-bezier(0.37, 0, 0.63, 1) infinite;
-}
-
-/* Subtle edge highlight that shifts with perspective */
-.carousel-card__front::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    160deg,
-    rgba(255,255,255,0.06) 0%,
-    transparent 30%,
-    transparent 70%,
-    rgba(0,0,0,0.03) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-.carousel-card.is-focused .carousel-card__front::before {
-  opacity: 1;
-}
-
-.carousel-card__front {
-  display: flex;
-  flex-direction: row;
-}
-.carousel-card__back {
-  transform: rotateY(180deg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--c-surface) 0%, var(--c-bg-alt) 100%);
-}
-.carousel-card__back .carousel-card__body {
-  padding: var(--space-xl);
-  text-align: center;
-}
-
-.carousel-card__image {
-  width: 40%;
-  min-height: 100%;
-  overflow: hidden;
-  background: var(--c-bg-alt);
-  flex-shrink: 0;
-}
-.carousel-card__image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.8s ease;
-}
-.carousel-card.is-focused .carousel-card__front .carousel-card__image img {
-  filter: brightness(1.05) saturate(1.1);
-}
-.carousel-card.is-focused:hover .carousel-card__front .carousel-card__image img {
-  transform: scale(1.12);
-}
-.carousel-card__image--placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--c-text-faint);
-  font-size: 2.5rem;
-}
-
-.carousel-card__front .carousel-card__body {
-  padding: var(--space-lg) var(--space-xl);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1;
-}
-
-.carousel-card__meta {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-  font-size: 0.8rem;
-  color: var(--c-text-muted);
-  margin-bottom: var(--space-sm);
-}
-
-.carousel-card__submeta {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.15rem;
-  width: 100%;
-  min-width: 0;
-  margin-top: var(--space-sm);
-  color: var(--c-text-faint);
-  font-size: 0.78rem;
-  line-height: 1.35;
-  text-align: center;
-}
-
-.carousel-card__submeta-item {
-  display: block;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-}
-
-.carousel-card__tags {
-  display: flex;
-  gap: 0.4rem;
-  margin-top: var(--space-sm);
-  padding-bottom: 0.2rem;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.carousel-card__tags::-webkit-scrollbar {
-  display: none;
-}
-
-.carousel-card__tag {
-  flex: 0 0 auto;
-  padding: 1px 7px;
-  border-radius: 999px;
-  border: 1px solid var(--c-border);
-  background: var(--c-bg-alt);
-  color: var(--c-text-faint);
-  font-size: 0.68rem;
-  line-height: 1.5;
-  white-space: nowrap;
-}
-
-.carousel-card__title {
-  font-family: var(--f-heading);
-  font-size: 1.35rem;
-  font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: -0.02em;
-  margin-bottom: var(--space-sm);
-  color: var(--c-text);
-}
-
-.carousel-card__excerpt {
-  font-size: 0.9rem;
-  color: var(--c-text-muted);
-  line-height: 1.6;
-}
-
-.carousel-card__footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-md);
-  margin-top: var(--space-md);
-  font-size: 0.8rem;
-  color: var(--c-text-faint);
-}
-
-.carousel-card__cta {
-  display: inline-block;
-  margin-top: var(--space-lg);
-  font-weight: 600;
-  color: var(--c-accent);
-  font-size: 0.95rem;
-}
-
-@media (max-width: 640px) {
-  .carousel-scene {
-    gap: var(--carousel-gap, 2rem);
-  }
-  .carousel-card__front {
-    flex-direction: column;
-  }
-  .carousel-card__image {
-    width: 100%;
-    min-height: auto;
-    aspect-ratio: 16 / 9;
-  }
-  .carousel-card {
-    min-height: auto;
-  }
-  .carousel-card__inner {
-    min-height: auto;
-  }
-  /* No 3D hover on mobile */
-  .carousel-card.is-focused:hover .carousel-card__inner {
-    transform: none;
-    animation: none;
-  }
-  .carousel-card__back {
-    display: none;
-  }
-  .carousel-card__front {
-    position: relative;
-  }
-  .carousel-card__face {
-    position: relative;
-  }
-}
-
-/* Reduced motion: disable all scroll transforms */
-@media (prefers-reduced-motion: reduce) {
-  .carousel-card {
-    opacity: 1 !important;
-  }
-  .carousel-card__inner {
-    transform: none !important;
-    transition: none;
-    animation: none !important;
-  }
-  .carousel-card.is-focused .carousel-card__inner {
-    animation: none !important;
-  }
-  .carousel-card.is-focused:hover .carousel-card__inner {
-    transform: none !important;
-  }
-  .carousel-card.is-focused .carousel-card__face {
-    animation: none !important;
-  }
-}
 
 /* ============================================================
    Table of Contents (auto-generated)
@@ -1411,8 +1009,7 @@ html[data-header-sticky="off"] .theme-toggle {
 }
 @media (max-width: 36rem) {
   .paper-card { flex-wrap: wrap; }
-  .paper-card__download { align-self: flex-start; }
-}
+  .paper-card__download { align-self: flex-start; }}
 
 /* Post Body */
 .post-body {
@@ -1773,202 +1370,6 @@ html[data-header-sticky="off"] .theme-toggle {
   color: var(--c-accent);
 }
 
-/* ============================================================
-   PolyVote CTA
-   ============================================================ */
-.polyvote-cta {
-  display: flex;
-  align-items: center;
-  gap: var(--space-lg);
-  max-width: var(--content-width);
-  margin: var(--space-2xl) auto 0;
-  padding: var(--space-lg) var(--space-xl);
-  background: var(--c-surface);
-  border: 1px solid var(--c-accent-border);
-  border-radius: var(--border-radius-lg);
-  transition: border-color var(--transition-fast);
-}
-.polyvote-cta:hover { border-color: var(--c-accent); }
-.polyvote-cta__icon {
-  flex-shrink: 0;
-  color: var(--c-accent);
-}
-.polyvote-cta__content { flex: 1; }
-.polyvote-cta__heading {
-  font-size: 0.95rem;
-  color: var(--c-text);
-  display: block;
-  margin-bottom: var(--space-xs);
-}
-.polyvote-cta__text {
-  font-size: 0.85rem;
-  color: var(--c-text-muted);
-  line-height: 1.5;
-  margin: 0;
-}
-.polyvote-cta__button {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-lg);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--c-bg);
-  background: var(--c-accent);
-  border-radius: var(--border-radius);
-  transition: all var(--transition-fast);
-  white-space: nowrap;
-}
-.polyvote-cta__button:hover {
-  background: var(--c-accent-dim);
-  transform: translateX(2px);
-}
-@media (max-width: 640px) {
-  .polyvote-cta {
-    flex-direction: column;
-    text-align: center;
-    padding: var(--space-lg);
-    gap: var(--space-md);
-  }
-  .polyvote-cta__icon { display: none; }
-}
-
-/* ============================================================
-   Voting Sidebar
-   ============================================================ */
-.voting-sidebar {
-  position: fixed;
-  top: calc(var(--header-height) + var(--space-lg));
-  right: 0.5rem;
-  width: var(--sidebar-width);
-  max-height: calc(100vh - var(--header-height) - 2rem);
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  overflow-y: auto;
-  scrollbar-width: none;
-}
-.voting-sidebar::-webkit-scrollbar { display: none; }
-
-.vote-section {
-  background: var(--c-surface);
-  border: 1px solid var(--c-border);
-  border-radius: var(--border-radius-sm);
-  padding: var(--space-xs);
-  text-align: center;
-  cursor: pointer;
-  transition: border-color var(--transition-fast), background var(--transition-fast);
-  position: relative;
-}
-.vote-section:hover,
-.vote-section.active {
-  border-color: var(--c-accent-border);
-  background: var(--c-accent-bg);
-}
-.vote-section.active::before {
-  content: '';
-  position: absolute;
-  left: -1px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--c-accent);
-  border-radius: 1px;
-}
-
-.vote-section__label {
-  font-size: 0.55rem;
-  color: var(--c-text-faint);
-  line-height: 1.2;
-  margin-bottom: 2px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100%;
-}
-
-.vote-btns {
-  display: flex;
-  justify-content: center;
-  gap: 2px;
-}
-.vote-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.7rem;
-  padding: 1px 3px;
-  border-radius: 2px;
-  transition: background var(--transition-fast);
-  line-height: 1;
-}
-.vote-btn:hover { background: var(--c-accent-bg); }
-.vote-btn.voted { opacity: 0.5; pointer-events: none; }
-
-.vote-pct {
-  font-size: 0.5rem;
-  color: var(--c-accent);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-
-.vote-comments {
-  font-size: 0.5rem;
-  color: var(--c-text-faint);
-  margin-top: 1px;
-}
-
-/* Mobile voting bar */
-.voting-mobile-bar {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  max-width: 100vw;
-  box-sizing: border-box;
-  background: var(--c-surface);
-  border-top: 1px solid var(--c-border);
-  padding: var(--space-sm) var(--space-md);
-  /* Sits above the sticky h2 banner (z-index: 50) so the persistent vote
-     controls always cover an h2 that pins close to the bottom edge. */
-  z-index: 60;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-sm);
-  overflow: hidden;
-}
-.voting-mobile-bar__section {
-  font-size: 0.75rem;
-  color: var(--c-text-muted);
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.voting-mobile-bar .vote-btns { gap: var(--space-sm); flex-shrink: 0; }
-.voting-mobile-bar .vote-btn { font-size: 1rem; padding: var(--space-xs); }
-.voting-mobile-bar .vote-pct { font-size: 0.75rem; flex-shrink: 0; }
-
-/* ============================================================
-   Comments (Giscus)
-   ============================================================ */
-.comments-section {
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: var(--space-2xl) var(--space-lg) var(--space-3xl);
-}
-
-.comments-section h2 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: var(--space-lg);
-}
-
 .comment-context-select {
   margin-bottom: var(--space-lg);
   display: flex;
@@ -2293,8 +1694,11 @@ html[data-header-sticky="off"] .theme-toggle {
    ============================================================ */
 .site-footer {
   border-top: 1px solid var(--c-border);
-  padding: var(--space-2xl) var(--space-lg);
-  margin-top: var(--space-3xl);
+  padding: var(--space-xl) var(--space-lg);
+  margin-top: var(--space-lg);
+  background-color: var(--c-bg-alt);
+  position: relative;
+  z-index: 1;
 }
 
 .footer-inner {
@@ -2341,33 +1745,6 @@ html[data-header-sticky="off"] .theme-toggle {
 .footer-social svg {
   width: 1.1rem;
   height: 1.1rem;
-}
-
-.footer-projects {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  justify-content: center;
-}
-.footer-projects a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: var(--border-radius-sm);
-  opacity: 0.75;
-  transition: opacity var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
-}
-.footer-projects a:hover {
-  opacity: 1;
-  background: var(--c-accent-bg);
-  transform: translateY(-1px);
-}
-.footer-projects img {
-  width: 1.25rem;
-  height: 1.25rem;
-  display: block;
 }
 
 .footer-copy {
@@ -2783,36 +2160,6 @@ html[data-header-sticky="off"] .theme-toggle {
 }
 
 /* ============================================================
-   Footer Support Section
-   ============================================================ */
-.footer-support {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.footer-support__link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-xs) var(--space-md);
-  font-size: 0.825rem;
-  font-weight: 600;
-  color: var(--c-accent);
-  border: 1px solid var(--c-accent-border);
-  border-radius: var(--border-radius);
-  transition: background var(--transition-fast), color var(--transition-fast);
-}
-.footer-support__link:hover {
-  background: var(--c-accent-bg);
-  color: var(--c-accent-dim);
-}
-.footer-support__link svg {
-  width: 0.9rem;
-  height: 0.9rem;
-  fill: var(--c-accent);
-}
-
-/* ============================================================
    Read Aloud Controls
    ============================================================ */
 .read-aloud {
@@ -2970,11 +2317,6 @@ html[data-header-sticky="off"] .theme-toggle {
    Responsive
    ============================================================ */
 @media (max-width: 64rem) {
-  .voting-sidebar { display: none; }
-  .voting-mobile-bar { display: flex; }
-  body.has-voting-bar {
-    padding-bottom: 3rem;
-  }
 
   /* Read Aloud: compact mobile layout */
   .read-aloud {
@@ -3041,14 +2383,12 @@ html[data-header-sticky="off"] .theme-toggle {
   .post-list-item { flex-direction: column; gap: var(--space-xs); }
   .post-list-item__date { min-width: auto; }
 
-  .cookie-card__grid { grid-template-columns: 1fr 1fr; }
-}
+  .cookie-card__grid { grid-template-columns: 1fr 1fr; }}
 
 @media (max-width: 30rem) {
   :root { --space-lg: 1rem; }
   .hero { min-height: 45vh; padding-top: var(--space-xl); }
-  .section-header { flex-direction: column; align-items: flex-start; }
-}
+  .section-header { flex-direction: column; align-items: flex-start; }}
 
 /* ============================================================
    Image Carousel
@@ -3182,8 +2522,7 @@ html[data-header-sticky="off"] .theme-toggle {
 @media (max-width: 30rem) {
   .carousel__arrow { width: 1.75rem; height: 1.75rem; font-size: 1rem; }
   .carousel__counter { font-size: 0.65rem; }
-  .carousel__slide img, .carousel__slide video { max-height: 45vh; }
-}
+  .carousel__slide img, .carousel__slide video { max-height: 45vh; }}
 
 /* [Status field update] Added .post-status-banner for article page disclaimer
    and .post-card__status badge for card/list views of non-published posts. */
@@ -3272,8 +2611,7 @@ html[data-header-sticky="off"] .theme-toggle {
   .chart-container {
     padding: clamp(8px, 2vw, 16px);
     margin: var(--space-lg) auto;
-  }
-}
+  }}
 
 @media print {
   .chart-container {
@@ -3282,8 +2620,7 @@ html[data-header-sticky="off"] .theme-toggle {
     background: #fff;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-  }
-}
+  }}
 
 /* ============================================================
    Parallax Backdrop
@@ -3313,7 +2650,7 @@ html[data-header-sticky="off"] .theme-toggle {
 .has-backdrop .site-footer {
   position: relative;
   z-index: 1;
-  background-color: rgba(var(--c-bg-rgb), var(--backdrop-opacity));
+  background-color: var(--c-bg-alt);
 }
 
 /* Translucent content backgrounds when backdrop is active */
@@ -3376,8 +2713,7 @@ html[data-header-sticky="off"] .theme-toggle {
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
-  }
-}
+  }}
 
 /* ============================================================
    Sticky h2 in long-form content (posts + .md pages)
@@ -3471,8 +2807,7 @@ html[data-header-sticky="off"] .theme-toggle {
 
 @media print {
   .post-body[itemprop="articleBody"] h2,
-  .page-body h2 { position: static; transform: none; }
-}
+  .page-body h2 { position: static; transform: none; }}
 
 @media (prefers-reduced-motion: reduce) {
   .post-body[itemprop="articleBody"] h2,
@@ -3481,68 +2816,8 @@ html[data-header-sticky="off"] .theme-toggle {
      reduced-motion intent of skipping the shrink-down visual change. */
   .sticky-h2-content { transition: none; }
   .post-body[itemprop="articleBody"] h2.is-stuck .sticky-h2-content,
-  .page-body h2.is-stuck .sticky-h2-content { transform: none; }
-}
+  .page-body h2.is-stuck .sticky-h2-content { transform: none; }}
 
-/* ============================================================
-   Brand splash / onboarding loader
-   Shown once per browser session (gated by <html data-splash="show">,
-   decided pre-paint in head.html). Markup + dismissal: _includes/brand-splash.html.
-   ============================================================ */
-.brand-splash { display: none; }
-
-/* Lock scroll + reveal the overlay only while the session's first load is in flight. */
-html[data-splash="show"] { overflow: hidden; }
-html[data-splash="show"] .brand-splash {
-  display: flex;
-  position: fixed;
-  inset: 0;
-  z-index: 100000; /* above skip-link (9999) and every modal/header */
-  align-items: center;
-  justify-content: center;
-  /* Matches the loader clip's dark-blue corner (~#0a121d) so the full-bleed
-     `contain` margins blend seamlessly into the backdrop on either theme. */
-  background: #0a121d;
-  opacity: 1;
-  /* ~the clip's last 25% (≈0.375s of the 1.5s clip): the fade is triggered at
-     75% of playtime so emblem + backdrop fade out together with the clip. */
-  transition: opacity 0.375s ease;
-}
-.brand-splash.is-hiding {
-  opacity: 0;
-  pointer-events: none;
-}
-/* Full-bleed emblem: the clip/poster is a square on the same dark-blue tile as
-   the backdrop, so `contain` fills the viewport edge-to-edge with no seam and
-   never crops the "R". */
-.brand-splash__media {
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  object-fit: contain;
-  opacity: 0.88;
-  filter: drop-shadow(0 0 60px rgba(56, 132, 255, 0.32));
-}
-.brand-splash__media--static { display: none; }
-.brand-splash__sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* Reduced motion: show the static poster, drop the fade. */
-@media (prefers-reduced-motion: reduce) {
-  .brand-splash__media--anim { display: none; }
-  html[data-splash="show"] .brand-splash .brand-splash__media--static { display: block; }
-  html[data-splash="show"] .brand-splash,
-  .brand-splash.is-hiding { transition: none; }
-}
 
 /* ============================================================
    Marble & Ink — serif/display refinements (loaded last so these
@@ -3663,7 +2938,12 @@ h1, h2, h3, h4, h5, h6,
 body::before {
   content: "";
   position: fixed;
-  inset: 0;
+  /* Pin to the LARGE viewport so the mobile URL bar showing/hiding can't
+     resize the fixed backdrop (which caused the scroll jank). */
+  top: 0; left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
   z-index: -2;
   background-image:
     linear-gradient(180deg, rgba(22,23,26,0.88) 0%, rgba(22,23,26,0.91) 100%),
@@ -3681,7 +2961,10 @@ body::before {
 body.has-overview-backdrop::after {
   content: "";
   position: fixed;
-  inset: 0;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
   z-index: -1;
   pointer-events: none;
   background-image:
@@ -3707,4 +2990,32 @@ body.has-overview-backdrop .taxonomy-section h2 {
 [data-theme="light"] body.has-overview-backdrop .section-title,
 [data-theme="light"] body.has-overview-backdrop .taxonomy-section h2 {
   text-shadow: 0 1px 10px rgba(246,245,242,0.85);
+}
+
+/* ============================================================
+   Frosted-glass containers — the cards/panels that overlay the
+   marble become a translucent (~72%) surface with a backdrop blur,
+   so the marble reads softly through and around them.
+   ============================================================ */
+.post-card,
+.paper-card,
+.taxonomy-list a,
+.taxonomy-posts a,
+.view-toggle,
+.search-box {
+  background-color: color-mix(in srgb, var(--c-surface) 72%, transparent);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  backdrop-filter: blur(10px) saturate(1.1);
+}
+/* Keep a solid surface on hover so the focused card reads cleanly. */
+.post-card:hover,
+.taxonomy-list a:hover,
+.taxonomy-posts a:hover {
+  background-color: color-mix(in srgb, var(--c-surface) 88%, transparent);
+}
+/* No backdrop-filter support → fall back to a near-solid surface. */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .post-card, .paper-card, .taxonomy-list a, .taxonomy-posts a, .view-toggle, .search-box {
+    background-color: color-mix(in srgb, var(--c-surface) 92%, transparent);
+  }
 }
