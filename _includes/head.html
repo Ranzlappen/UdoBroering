@@ -1,5 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#16171a">
 <meta name="description" content="{{ page.description | default: site.description | strip_html | truncatewords: 50 }}">
 <meta name="author" content="{{ site.author.name }}">
 
@@ -64,6 +65,10 @@
   }
 }
 </script>
+
+<!-- Preload the two critical self-hosted serifs (body + display) -->
+<link rel="preload" href="{{ '/assets/fonts/eb-garamond-latin-400-normal.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ '/assets/fonts/cormorant-garamond-latin-700-normal.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
 
 <!-- CSS -->
 <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">

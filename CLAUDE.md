@@ -64,8 +64,17 @@ bundle exec jekyll build        # production build into _site/
 - **Privacy-first**: no analytics, no first-party cookies, no Firebase/Giscus. The
   only consent-gated third parties are the Lunr CDN (search) and the Chart.js CDN
   (charts on posts). GDPR cookie consent with a functional category.
-- **Theme**: dark is default; a CSS-custom-property light mode toggles via
-  `<html data-theme>`. A header pin/unpin toggle controls header stickiness.
+- **Theme**: "Marble & Ink" — charcoal/marble greys with a bronze accent (and an
+  oxblood secondary, `--c-accent-2`). Dark "study" is default; a CSS-custom-property
+  light "gallery" mode toggles via `<html data-theme>`. Palette + fonts are entirely
+  driven by the `:root` / `[data-theme="light"]` custom properties, so recoloring is
+  centralized. A header pin/unpin toggle controls header stickiness.
+- **Fonts (self-hosted)**: serif throughout — **EB Garamond** (body, `--f-body`) and
+  **Cormorant Garamond** (display headings, `--f-heading`), self-hosted as woff2 in
+  `assets/fonts/` (SIL OFL) with `@font-face` + `font-display: swap` at the top of
+  `style.css`. No third-party font CDN (privacy-first). The two critical weights are
+  `<link rel="preload">`-ed in `_includes/head.html` and precached by `sw.js`. To add
+  a weight: drop the woff2 in `assets/fonts/`, add an `@font-face`, bump `CACHE_VERSION`.
 - **PWA**: installable (`site.webmanifest`, `display: standalone`) with a
   hand-written `sw.js` (precache shell + `offline.html`; cache-first static,
   network-first navigations). Bump `CACHE_VERSION` in `sw.js` when the shell changes.
@@ -100,6 +109,7 @@ deploys to GitHub Pages on push to `main` (and `workflow_dispatch`). One-time se
 ├── assets/
 │   ├── css/                 # style.css, cookie-consent.css
 │   ├── js/                  # main, cookie-consent, search, carousel, charts, read-aloud, share
+│   ├── fonts/               # Self-hosted serif woff2 (EB Garamond + Cormorant Garamond)
 │   ├── papers/              # Published PDFs (auto-listed at /papers/)
 │   └── images/              # icon_alpha.png (logo) + per-post hero dirs
 ├── icons/                   # Favicons + PWA icons (placeholders)

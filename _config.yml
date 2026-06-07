@@ -6,8 +6,8 @@
 # Replace "Your Blog Name" / social handles when you're ready to brand.
 # ============================================================
 title: "Your Blog Name"
-tagline: "Projects, Curiosities & Everything In Between"
-description: "A personal blog about passion projects, random experiments, and whatever catches my attention."
+tagline: "Essays and papers on the thinkers who shaped how we understand the world."
+description: "Writings on philosophy — the great thinkers of ancient and modern times, their ideas, and why they still matter."
 url: "https://udobroering.de"
 # Custom apex domain (see the CNAME file) — GitHub Pages serves the site at the
 # domain root, so baseurl is empty. (If you ever drop the custom domain and serve

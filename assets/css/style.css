@@ -4,41 +4,50 @@ REASON: Chart system overhaul to Chart.js; overflow-wrap fix for long URLs in po
 DATE: 2026-04-03
 */
 /* ============================================================
-   Blog — Custom CSS
-   Dark-first theme with subtle green accent
-   System fonts only · No frameworks
+   Marble & Ink — Custom CSS
+   Dark-first "study" theme · marble greys, ink, bronze accent
+   Self-hosted serif: EB Garamond (body) + Cormorant Garamond (display)
    ============================================================ */
+
+/* --- Self-hosted fonts (privacy-first: no third-party CDN at load) --- */
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-weight: 400; font-display: swap; src: url('../fonts/eb-garamond-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-weight: 500; font-display: swap; src: url('../fonts/eb-garamond-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-weight: 600; font-display: swap; src: url('../fonts/eb-garamond-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'EB Garamond'; font-style: italic; font-weight: 400; font-display: swap; src: url('../fonts/eb-garamond-latin-400-italic.woff2') format('woff2'); }
+@font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 600; font-display: swap; src: url('../fonts/cormorant-garamond-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 700; font-display: swap; src: url('../fonts/cormorant-garamond-latin-700-normal.woff2') format('woff2'); }
 
 /* --- CSS Custom Properties (Dark Default) --- */
 :root {
-  /* Colors — Dark Theme */
-  --c-bg:          #0b1210;
-  --c-bg-alt:      #111b17;
-  --c-surface:     #15201b;
-  --c-surface-alt: #1b2924;
-  --c-border:      #253830;
-  --c-border-light:#1e2f28;
-  --c-text:        #dce8e2;
-  --c-text-muted:  #7e948a;
-  --c-text-faint:  #556b62;
-  --c-accent:      #4ade80;
-  --c-accent-dim:  #22c55e;
-  --c-accent-bg:   rgba(74, 222, 128, 0.08);
-  --c-accent-border: rgba(74, 222, 128, 0.2);
-  --c-danger:      #f87171;
-  --c-warning:     #fbbf24;
-  --c-overlay:     rgba(5, 10, 8, 0.8);
-  --c-code-bg:     #0d1a14;
-  --c-card-shadow: rgba(0, 0, 0, 0.35);
-  --c-hero-overlay: linear-gradient(135deg, rgba(11,18,16,0.92) 0%, rgba(11,18,16,0.7) 100%);
+  /* Colors — Marble & Ink, Dark "Study" (default) */
+  --c-bg:          #16171a;  /* charcoal ink */
+  --c-bg-alt:      #1b1c20;
+  --c-surface:     #1e2024;  /* dark marble */
+  --c-surface-alt: #25272c;
+  --c-border:      #34373d;
+  --c-border-light:#2a2c31;
+  --c-text:        #ece9e2;  /* alabaster */
+  --c-text-muted:  #a7a399;
+  --c-text-faint:  #74716a;
+  --c-accent:      #c9a45c;  /* bronze */
+  --c-accent-dim:  #b0863f;  /* deeper bronze (hover) */
+  --c-accent-bg:   rgba(201, 164, 92, 0.10);
+  --c-accent-border: rgba(201, 164, 92, 0.30);
+  --c-accent-2:    #b1564f;  /* oxblood (secondary) */
+  --c-danger:      #e06b6b;
+  --c-warning:     #d8a657;
+  --c-overlay:     rgba(10, 11, 13, 0.82);
+  --c-code-bg:     #121316;
+  --c-card-shadow: rgba(0, 0, 0, 0.45);
+  --c-hero-overlay: linear-gradient(135deg, rgba(22,23,26,0.92) 0%, rgba(22,23,26,0.7) 100%);
 
   /* Background RGB (for rgba usage with parallax backdrop) */
-  --c-bg-rgb:      11, 18, 16;
+  --c-bg-rgb:      22, 23, 26;
   --backdrop-opacity: 0.88;
 
   /* Typography */
-  --f-body:    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-  --f-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  --f-body:    'EB Garamond', Georgia, 'Times New Roman', Times, serif;
+  --f-heading: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
   --f-mono:    'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace;
 
   /* Spacing */
@@ -89,25 +98,27 @@ DATE: 2026-04-03
 }
 
 /* --- Light Theme --- */
+/* Marble & Ink — Light "Gallery" (toggle) */
 [data-theme="light"] {
-  --c-bg:          #f5f9f7;
-  --c-bg-alt:      #edf3f0;
-  --c-surface:     #ffffff;
-  --c-surface-alt: #f0f5f2;
-  --c-border:      #d0ddd6;
-  --c-border-light:#dde8e2;
-  --c-text:        #1a2a22;
-  --c-text-muted:  #5a7068;
-  --c-text-faint:  #8a9e95;
-  --c-accent:      #16a34a;
-  --c-accent-dim:  #15803d;
-  --c-accent-bg:   rgba(22, 163, 74, 0.06);
-  --c-accent-border: rgba(22, 163, 74, 0.2);
-  --c-overlay:     rgba(245, 249, 247, 0.85);
-  --c-code-bg:     #edf3f0;
-  --c-card-shadow: rgba(0, 0, 0, 0.08);
-  --c-hero-overlay: linear-gradient(135deg, rgba(245,249,247,0.92) 0%, rgba(245,249,247,0.7) 100%);
-  --c-bg-rgb:      245, 249, 247;
+  --c-bg:          #f6f5f2;  /* marble / alabaster */
+  --c-bg-alt:      #efede8;
+  --c-surface:     #fffefb;
+  --c-surface-alt: #f1efea;
+  --c-border:      #ddd8cf;
+  --c-border-light:#e7e3da;
+  --c-text:        #1c1d21;  /* charcoal ink */
+  --c-text-muted:  #5c5b55;
+  --c-text-faint:  #8d8b83;
+  --c-accent:      #8a6a3b;  /* bronze (darker for light bg) */
+  --c-accent-dim:  #6f5230;
+  --c-accent-bg:   rgba(138, 106, 59, 0.08);
+  --c-accent-border: rgba(138, 106, 59, 0.26);
+  --c-accent-2:    #6b2b2b;  /* oxblood */
+  --c-overlay:     rgba(246, 245, 242, 0.86);
+  --c-code-bg:     #efece6;
+  --c-card-shadow: rgba(40, 35, 25, 0.10);
+  --c-hero-overlay: linear-gradient(135deg, rgba(246,245,242,0.92) 0%, rgba(246,245,242,0.7) 100%);
+  --c-bg-rgb:      246, 245, 242;
 }
 
 /* ============================================================
@@ -3531,4 +3542,110 @@ html[data-splash="show"] .brand-splash {
   html[data-splash="show"] .brand-splash .brand-splash__media--static { display: block; }
   html[data-splash="show"] .brand-splash,
   .brand-splash.is-hiding { transition: none; }
+}
+
+/* ============================================================
+   Marble & Ink — serif/display refinements (loaded last so these
+   win over the earlier per-component letter-spacing/weights).
+   ============================================================ */
+
+/* Garamond runs small — give the body a touch more size + leading. */
+body { font-size: 1.075rem; line-height: 1.72; }
+
+/* Serif display headings: kill the old tight/negative tracking (serifs
+   read worse compressed), and cap weight to what we self-host (≤700). */
+h1, h2, h3, h4, h5, h6,
+.hero h1, .section-title, .page-header h1, .page-header h2,
+.post-header h1, .paper-card__title, .post-card__title,
+.related-posts__heading, .taxonomy-section h2 {
+  font-family: var(--f-heading);
+  letter-spacing: 0;
+  font-weight: 700;
+}
+
+/* Hero: larger, more sculptural display type. */
+.hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+}
+.hero h1 .accent {
+  color: var(--c-accent-2);
+  font-style: italic;
+  font-weight: 600;
+}
+.hero p {
+  font-style: italic;
+  color: var(--c-text-muted);
+}
+
+/* Page/post titles: a hairline bronze rule beneath, like a chapter head. */
+.page-header { border-bottom: 1px solid var(--c-border-light); }
+
+/* Category / status chips read as small-caps labels, not pills. */
+.post-header__category, .post-card__category {
+  font-family: var(--f-body);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--c-accent);
+}
+
+/* Classical centered ornament (a thin rule with a diamond) — reusable.
+   Drop <div class="ornament" aria-hidden="true"></div> anywhere. */
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  margin: var(--space-xl) auto;
+  color: var(--c-accent);
+  max-width: 18rem;
+}
+.ornament::before, .ornament::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(to var(--_d, right), transparent, var(--c-border));
+}
+.ornament::after { --_d: left; }
+.ornament__mark {
+  width: 7px; height: 7px;
+  transform: rotate(45deg);
+  border: 1px solid currentColor;
+  flex-shrink: 0;
+}
+
+/* Hero motif: a large faint Φ (phi, the emblem of philosophy) behind the
+   headline, set in the display serif. */
+.hero { position: relative; overflow: hidden; }
+.hero__phi {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--f-heading);
+  font-weight: 600;
+  font-size: min(30rem, 72vw);
+  line-height: 1;
+  color: var(--c-accent);
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+.hero-content { position: relative; z-index: 1; }
+
+/* Links inside prose: bronze with a refined underline. */
+.post-body a, .page-body a { text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+
+/* Drop cap on the first paragraph of an article — classic editorial flourish. */
+.post-body > p:first-of-type::first-letter {
+  font-family: var(--f-heading);
+  font-weight: 700;
+  font-size: 3.1em;
+  line-height: 0.82;
+  float: left;
+  margin: 0.06em 0.08em 0 0;
+  color: var(--c-accent);
 }
