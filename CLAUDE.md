@@ -57,9 +57,10 @@ bundle exec jekyll build        # production build into _site/
   (name it `YYYY-MM-DD-title.pdf` to sort newest-first). Optional richer metadata
   (`title`, `authors`, `date`, `description`) lives in `_data/papers.yml`, keyed by
   the exact PDF filename; without an entry the bare filename is used. When a new PDF
-  lands on `main`, the **`sync-papers`** workflow runs `script/sync_papers.rb` to
-  append a ready-to-fill stub entry for it (date parsed from the filename prefix) and
-  commits it back — purely a convenience, since the page lists the PDF regardless.
+  lands on `main`, the deploy workflow's **`prepare`** job runs `script/sync_papers.rb`
+  to append a ready-to-fill stub entry for it (date parsed from the filename prefix)
+  and commits it back *before* the build — purely a convenience, since the page lists
+  the PDF regardless. Run it locally any time with `ruby script/sync_papers.rb`.
 - **Search**: `Ctrl/Cmd+K` modal (`_includes/search-modal.html` + `assets/js/search.js`)
   runs **client-side Lunr** over **`_posts` only**, indexed by the Liquid-generated
   `search.json`. It loads Lunr from a CDN behind the functional-cookie consent gate —
@@ -93,18 +94,18 @@ and Atom `feed.xml`, and `robots.txt`.
 
 ## Deployment & CI/CD
 
-Two workflows:
-- `.github/workflows/jekyll-gh-pages.yml` — builds with Jekyll and deploys to GitHub
-  Pages on push to `main` (and `workflow_dispatch`). One-time setup: *Settings → Pages
-  → Source: GitHub Actions*.
-- `.github/workflows/sync-papers.yml` — on a push to `main` touching `assets/papers/**`,
-  runs `script/sync_papers.rb` to append a stub `_data/papers.yml` entry for any new PDF
-  and commits it back (`contents: write`). The commit is made with the default
-  `GITHUB_TOKEN`, so it neither re-triggers this workflow (it's outside the
-  `assets/papers/**` filter anyway) nor kicks off a fresh deploy — the PDF is already
-  live from the original push, and the stub holds only TODO placeholders until you fill
-  them in (that human edit triggers the next deploy). Run it locally any time with
-  `ruby script/sync_papers.rb`.
+One workflow, `.github/workflows/jekyll-gh-pages.yml`, builds with Jekyll and deploys
+to GitHub Pages on push to `main` (and `workflow_dispatch`). One-time setup: *Settings
+→ Pages → Source: GitHub Actions*. It runs three jobs:
+- **`prepare`** (`contents: write`) — runs `script/sync_papers.rb` to scaffold
+  `_data/papers.yml` stubs for any new PDFs and commits them back *before* the build,
+  so the deploy reflects them. The commit uses the default `GITHUB_TOKEN`, which does
+  **not** re-trigger the workflow — keeping it to a single deployment per push (folding
+  this in-line avoids the earlier race where a separate sync commit kicked a second,
+  colliding Pages deployment). `build` checks out the post-stub commit via the job's
+  `sha` output.
+- **`build`** — `bundle exec jekyll build`, uploads the Pages artifact.
+- **`deploy`** — `actions/deploy-pages` to the `github-pages` environment.
 
 `.github/dependabot.yml` keeps the `bundler` and `github-actions` ecosystems updated
 weekly.
@@ -134,8 +135,7 @@ weekly.
 └── .github/
     ├── dependabot.yml
     └── workflows/
-        ├── jekyll-gh-pages.yml   # build + deploy to Pages
-        └── sync-papers.yml       # scaffold papers.yml stubs for new PDFs
+        └── jekyll-gh-pages.yml   # prepare (papers stubs) + build + deploy to Pages
 ```
 
 ## Post-task self-check
