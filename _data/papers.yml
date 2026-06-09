@@ -12,3 +12,10 @@
   description: >-
     A short abstract or summary of the paper. Replace this entry — and the
     PDF in assets/papers/ — with a real publication.
+
+"2026-06-09-test.pdf":
+  title: "Test"        # TODO: confirm/replace title
+  authors: "Udo Bröring"
+  date: 2026-06-09
+  description: >-
+    TODO: add an abstract or summary for this document.
