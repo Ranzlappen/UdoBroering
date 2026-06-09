@@ -71,6 +71,11 @@ The **Papers** section (`/papers/`) auto-lists every PDF in `assets/papers/`:
 
    Without an entry, the paper still lists using its filename.
 
+   > Once your PDF is merged to `main`, the **`sync-papers`** workflow appends a
+   > pre-filled stub for it to `_data/papers.yml` automatically (with the date parsed
+   > from the filename) — so step 2 becomes "edit the generated stub" rather than
+   > "write one from scratch." You can also run it locally: `ruby script/sync_papers.rb`.
+
 ## Project structure
 
 ```
@@ -93,6 +98,10 @@ feed.xml sitemap.xml search.json robots.txt site.webmanifest sw.js offline.html 
 Push to `main` → `.github/workflows/jekyll-gh-pages.yml` builds with Jekyll and
 deploys to GitHub Pages. **One-time setup:** in the repo, go to *Settings → Pages →
 Build and deployment → Source: GitHub Actions*.
+
+A second workflow, `.github/workflows/sync-papers.yml`, watches `assets/papers/**` on
+`main` and auto-commits stub `_data/papers.yml` entries for newly added PDFs (see
+*Publishing a paper* above).
 
 ## License
 

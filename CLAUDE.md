@@ -56,7 +56,10 @@ bundle exec jekyll build        # production build into _site/
   `assets/papers/` by iterating `site.static_files` — drop a PDF in and it appears
   (name it `YYYY-MM-DD-title.pdf` to sort newest-first). Optional richer metadata
   (`title`, `authors`, `date`, `description`) lives in `_data/papers.yml`, keyed by
-  the exact PDF filename; without an entry the bare filename is used.
+  the exact PDF filename; without an entry the bare filename is used. When a new PDF
+  lands on `main`, the **`sync-papers`** workflow runs `script/sync_papers.rb` to
+  append a ready-to-fill stub entry for it (date parsed from the filename prefix) and
+  commits it back — purely a convenience, since the page lists the PDF regardless.
 - **Search**: `Ctrl/Cmd+K` modal (`_includes/search-modal.html` + `assets/js/search.js`)
   runs **client-side Lunr** over **`_posts` only**, indexed by the Liquid-generated
   `search.json`. It loads Lunr from a CDN behind the functional-cookie consent gate —
@@ -90,10 +93,21 @@ and Atom `feed.xml`, and `robots.txt`.
 
 ## Deployment & CI/CD
 
-One workflow: `.github/workflows/jekyll-gh-pages.yml` — builds with Jekyll and
-deploys to GitHub Pages on push to `main` (and `workflow_dispatch`). One-time setup:
-*Settings → Pages → Source: GitHub Actions*. `.github/dependabot.yml` keeps the
-`bundler` and `github-actions` ecosystems updated weekly.
+Two workflows:
+- `.github/workflows/jekyll-gh-pages.yml` — builds with Jekyll and deploys to GitHub
+  Pages on push to `main` (and `workflow_dispatch`). One-time setup: *Settings → Pages
+  → Source: GitHub Actions*.
+- `.github/workflows/sync-papers.yml` — on a push to `main` touching `assets/papers/**`,
+  runs `script/sync_papers.rb` to append a stub `_data/papers.yml` entry for any new PDF
+  and commits it back (`contents: write`). The commit is made with the default
+  `GITHUB_TOKEN`, so it neither re-triggers this workflow (it's outside the
+  `assets/papers/**` filter anyway) nor kicks off a fresh deploy — the PDF is already
+  live from the original push, and the stub holds only TODO placeholders until you fill
+  them in (that human edit triggers the next deploy). Run it locally any time with
+  `ruby script/sync_papers.rb`.
+
+`.github/dependabot.yml` keeps the `bundler` and `github-actions` ecosystems updated
+weekly.
 
 ## Project structure
 
@@ -108,6 +122,7 @@ deploys to GitHub Pages on push to `main` (and `workflow_dispatch`). One-time se
 ├── _layouts/                # default, home, page, post
 ├── _posts/                  # Blog content (Markdown)
 ├── pages/                   # articles, papers, projects, categories, tags, about, privacy, disclaimer
+├── script/                  # sync_papers.rb (scaffolds _data/papers.yml stubs)
 ├── assets/
 │   ├── css/                 # style.css, cookie-consent.css
 │   ├── js/                  # main, cookie-consent, search, carousel, charts, read-aloud, share
@@ -118,7 +133,9 @@ deploys to GitHub Pages on push to `main` (and `workflow_dispatch`). One-time se
 ├── site.webmanifest sw.js offline.html 404.html index.html
 └── .github/
     ├── dependabot.yml
-    └── workflows/jekyll-gh-pages.yml
+    └── workflows/
+        ├── jekyll-gh-pages.yml   # build + deploy to Pages
+        └── sync-papers.yml       # scaffold papers.yml stubs for new PDFs
 ```
 
 ## Post-task self-check
