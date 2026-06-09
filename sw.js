@@ -7,7 +7,7 @@ layout: null
    No build step, no Workbox. Bump CACHE_VERSION to invalidate. */
 "use strict";
 
-const CACHE_VERSION = "udoblog-v12";
+const CACHE_VERSION = "udoblog-v13";
 const PRECACHE = CACHE_VERSION + "-precache";
 const RUNTIME = CACHE_VERSION + "-runtime";
 
@@ -89,9 +89,14 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // CSS/JS: network-first (we iterate on these often), so a change shows on the
+  // CSS/JS and the search index: network-first (we iterate on these often, and
+  // search.json must reflect the latest posts/papers), so a change shows on the
   // next load instead of lagging a CACHE_VERSION behind; fall back to cache offline.
-  if (url.pathname.endsWith(".css") || url.pathname.endsWith(".js")) {
+  if (
+    url.pathname.endsWith(".css") ||
+    url.pathname.endsWith(".js") ||
+    url.pathname.endsWith("/search.json")
+  ) {
     event.respondWith(
       fetch(req)
         .then((res) => {
