@@ -61,9 +61,12 @@ bundle exec jekyll build        # production build into _site/
   append a ready-to-fill stub entry for it (date parsed from the filename prefix) and
   commits it back — purely a convenience, since the page lists the PDF regardless.
 - **Search**: `Ctrl/Cmd+K` modal (`_includes/search-modal.html` + `assets/js/search.js`)
-  runs **client-side Lunr** over **`_posts` only**, indexed by the Liquid-generated
-  `search.json`. It loads Lunr from a CDN behind the functional-cookie consent gate —
-  keep it that way; do not add a query-time third-party search service.
+  runs **client-side Lunr** over the Liquid-generated `search.json`, which indexes
+  both **`_posts`** (`type: post`) and the **PDFs in `assets/papers/`** (`type: paper`,
+  searchable by title/authors/filename, enriched from `_data/papers.yml`). Paper hits
+  show a "Paper" badge and open the PDF in a new tab. It loads Lunr from a CDN behind
+  the functional-cookie consent gate — keep it that way; do not add a query-time
+  third-party search service.
 - **Privacy-first**: no analytics, no first-party cookies, no Firebase/Giscus. The
   only consent-gated third parties are the Lunr CDN (search) and the Chart.js CDN
   (charts on posts). GDPR cookie consent with a functional category.
