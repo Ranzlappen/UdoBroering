@@ -64,6 +64,7 @@
             this.ref('url');
             this.field('title', { boost: 10 });
             this.field('content');
+            this.field('authors', { boost: 8 });
             this.field('tags', { boost: 5 });
             this.field('category', { boost: 3 });
             documents.forEach(function (doc) { this.add(doc); }, this);
@@ -107,20 +108,35 @@
       return;
     }
 
-    // Flat list of posts, in Lunr's relevance order.
+    // Flat list of results (posts + papers), in Lunr's relevance order.
     results.slice(0, TOTAL_CAP).forEach(function (r) {
       var doc = documents.find(function (d) { return d.url === r.ref; });
       if (!doc) return;
 
+      var isPaper = doc.type === 'paper';
+
       var item = document.createElement('a');
       item.className = 'search-result-item';
       item.href = doc.url;
+      if (isPaper) {
+        // Papers are PDFs — open in a new tab, like the /papers/ page does.
+        item.target = '_blank';
+        item.rel = 'noopener';
+      }
 
       var title = document.createElement('h4');
       title.textContent = doc.title;
+      if (isPaper) {
+        var badge = document.createElement('span');
+        badge.className = 'search-result-badge';
+        badge.textContent = 'Paper';
+        title.appendChild(badge);
+      }
 
       var snippet = document.createElement('p');
-      var text = doc.content || '';
+      // For papers, lead with the authors when we have them.
+      var text = (isPaper && doc.authors ? doc.authors + ' — ' : '') + (doc.content || '');
+      text = text.trim();
       snippet.textContent = text.substring(0, 120) + (text.length > 120 ? '…' : '');
 
       item.appendChild(title);
