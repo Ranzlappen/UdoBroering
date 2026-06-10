@@ -7,7 +7,7 @@ layout: null
    No build step, no Workbox. Bump CACHE_VERSION to invalidate. */
 "use strict";
 
-const CACHE_VERSION = "udoblog-v13";
+const CACHE_VERSION = "udoblog-v14";
 const PRECACHE = CACHE_VERSION + "-precache";
 const RUNTIME = CACHE_VERSION + "-runtime";
 

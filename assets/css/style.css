@@ -1431,6 +1431,15 @@ html[data-header-sticky="off"] .theme-toggle {
   padding-left: var(--space-xl);
   margin-bottom: var(--space-md);
 }
+/* On phones, drop the list indent so lists sit flush with body text. Markers
+   move inside the flow (instead of in the now-gone left padding) so bullets and
+   ordered numbers stay visible rather than spilling off the left edge. */
+@media (max-width: 36rem) {
+  .page-body ul, .page-body ol {
+    padding-left: 0;
+    list-style-position: inside;
+  }
+}
 
 /* ============================================================
    Contact Form
