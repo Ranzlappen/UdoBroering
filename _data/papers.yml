@@ -5,21 +5,6 @@
 #
 # Tip: name files like  YYYY-MM-DD-short-title.pdf  so they sort newest-first.
 
-"2026-06-06-sample-paper.pdf":
-  title: "Sample Paper Title"
-  authors: "Udo Bröring"
-  date: 2026-06-06
-  description: >-
-    A short abstract or summary of the paper. Replace this entry — and the
-    PDF in assets/papers/ — with a real publication.
-
-"2026-06-09-test.pdf":
-  title: "Test"        # TODO: confirm/replace title
-  authors: "Udo Bröring"
-  date: 2026-06-09
-  description: >-
-    TODO: add an abstract or summary for this document.
-
 "East Frisian Flies and Midges.pdf":
   title: "East Frisian Flies And Midges"        # TODO: confirm/replace title
   authors: "Udo Bröring"
