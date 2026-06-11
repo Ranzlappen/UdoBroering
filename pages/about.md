@@ -2,6 +2,7 @@
 layout: page
 title: About
 subtitle: The person behind the posts
+description: "Who writes this site, what it covers, and how it's built — a personal blog of essays and papers, made with Jekyll, no tracking."
 permalink: /about/
 ---
 

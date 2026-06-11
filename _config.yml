@@ -9,6 +9,19 @@ title: "Udo Bröring"
 tagline: "Essays and papers on the thinkers who shaped how we understand the world."
 description: "Writings on philosophy — the great thinkers of ancient and modern times, their ideas, and why they still matter."
 url: "https://udobroering.de"
+lang: "en"          # <html lang> + JSON-LD inLanguage (per-post override: lang in front matter)
+locale: "en_US"     # og:locale
+
+# Default social-share image: og:image/twitter:image fallback for pages without
+# their own raster `image` (SVG covers are skipped — no platform previews SVG).
+# Replace with a real 1200×630 banner when branding lands.
+social_image: "/icons/icon-512.png"
+
+# Search-engine ownership verification — uncomment and paste the token (the
+# content="…" value) when registering at Google Search Console / Bing Webmaster
+# Tools. Submitting sitemap.xml there is the single highest-impact indexing step.
+# google_site_verification: ""
+# bing_site_verification: ""
 # Custom apex domain (see the CNAME file) — GitHub Pages serves the site at the
 # domain root, so baseurl is empty. (If you ever drop the custom domain and serve
 # from https://ranzlappen.github.io/UdoBroering/ again, set baseurl: "/UdoBroering"
@@ -53,17 +66,22 @@ defaults:
     values:
       layout: "page"
 
-# Exclude from build
+# Exclude from build — keep internal files (docs, scripts, brand palette) out
+# of the published site so crawlers only ever see real content.
 exclude:
   - Gemfile
   - Gemfile.lock
   - node_modules
   - README.md
+  - CLAUDE.md
   - LICENSE
   - .gitignore
   - vendor
+  - script
+  - theme.json
 
 # Plugins (GitHub Pages compatible)
+# SEO meta/OG/JSON-LD is hand-rolled in _includes/head.html — do not add
+# jekyll-seo-tag back, it would duplicate every tag.
 plugins:
-  - jekyll-seo-tag
   - jekyll-paginate

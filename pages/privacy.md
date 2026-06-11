@@ -2,10 +2,9 @@
 layout: page
 title: Privacy Policy
 subtitle: How your data is handled
+description: "How this site handles your data: no accounts, no analytics, no tracking, no first-party cookies — and what little is involved in hosting and consent-gated CDNs."
 permalink: /privacy/
 ---
-
-# Privacy Policy
 
 **Last updated: {{ 'now' | date: '%B %Y' }}**
 

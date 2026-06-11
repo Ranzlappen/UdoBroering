@@ -1,9 +1,11 @@
 # Jekyll Blog (clean starter)
 
 A minimal, SEO-friendly **Jekyll blog**, hosted on GitHub Pages. Dark/light theme,
-installable PWA + offline support, RSS, full SEO metadata (jekyll-seo-tag + JSON-LD
-+ Open Graph/Twitter cards), a custom status-filtered sitemap & feed, categories,
-tags, series, and client-side search over your own posts.
+installable PWA + offline support, RSS, full hand-rolled SEO metadata (canonical +
+meta description, JSON-LD structured data, Open Graph/Twitter cards — exactly one
+of each per page), a custom status-filtered sitemap & feed (the sitemap also lists
+every paper PDF), categories, tags, series, and client-side search over your own
+posts and papers.
 
 This is a clean fork of a larger site — stripped down to just the blog framework.
 No external apps, no Firebase, no comments backend, no branding yet.
@@ -58,18 +60,22 @@ The **Papers** section (`/papers/`) auto-lists every PDF in `assets/papers/`:
 
 1. Drop your PDF into **`assets/papers/`** — name it `YYYY-MM-DD-short-title.pdf`
    so papers sort newest-first. That's it; it appears on `/papers/` automatically.
-2. *(Optional)* add a nicer title, authors, date, and abstract by keying an entry
-   to the **exact filename** in **`_data/papers.yml`**:
+2. *(Optional but worth it for search engines)* add a nicer title, authors, date,
+   abstract, and language by keying an entry to the **exact filename** in
+   **`_data/papers.yml`**:
 
    ```yaml
    "2026-06-06-my-paper.pdf":
      title: "A Better Title Than the Filename"
      authors: "Udo Bröring"
-     date: 2026-06-06
-     description: "Short abstract shown under the title."
+     date: 2026-06-06          # also: sitemap <lastmod> + JSON-LD datePublished
+     lang: en                  # JSON-LD inLanguage (e.g. "en", "de")
+     description: "Short abstract shown under the title (write it in the paper's language)."
    ```
 
-   Without an entry, the paper still lists using its filename.
+   Without an entry, the paper still lists using its filename. The metadata also
+   feeds the `ScholarlyArticle` structured data on `/papers/`, the sitemap, and
+   the search index — so filling it in is what makes a paper findable.
 
    > Once your PDF is pushed to `main`, the deploy workflow's **`prepare`** job appends
    > a pre-filled stub for it to `_data/papers.yml` automatically (with the date parsed
