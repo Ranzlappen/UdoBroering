@@ -3,28 +3,53 @@
 # just drop a file in and it appears. Add an entry here only when you want a
 # nicer title, authors, date, or abstract than the bare filename.
 #
+# Fields (all optional): title, authors, date (YYYY-MM-DD — also used as the
+# sitemap <lastmod> and the ScholarlyArticle datePublished), description (used
+# as the visible blurb, the search index, and the JSON-LD abstract — write it
+# in the paper's own language), lang (BCP-47 code, e.g. "en" / "de", used as
+# the JSON-LD inLanguage).
+#
 # Tip: name files like  YYYY-MM-DD-short-title.pdf  so they sort newest-first.
 
 "East Frisian Flies and Midges.pdf":
-  title: "East Frisian Flies And Midges"        # TODO: confirm/replace title
+  title: "Systematic and Biogeographical Account of the Midges and Flies (Diptera) of the East Frisian Islands"
   authors: "Udo Bröring"
+  date: 2009-10-05
+  lang: en
   description: >-
-    TODO: add an abstract or summary for this document.
+    A systematic and biogeographical account of the Diptera — the midges and
+    flies — of the East Frisian Islands: their occurrence on the Wadden Sea
+    islands, species–area relations, and island colonization.
 
 "Epistemological Problems - Changing Views at Nature.pdf":
-  title: "Epistemological Problems Changing Views At Nature"        # TODO: confirm/replace title
+  title: "Epistemological Problems of Ecology: Changing Views at Nature from Ancient to Modern Times"
   authors: "Udo Bröring"
+  date: 2014-07-30
+  lang: en
   description: >-
-    TODO: add an abstract or summary for this document.
+    A lecture manuscript on the epistemology of ecology, tracing conceptions of
+    nature from the pre-ancient and ancient world through Jewish and Christian
+    traditions and the medieval ages into the modern era, with case studies on
+    nature, human work, and aesthetic judgement.
 
 "The Theory of Island Biogeography - An Overview.pdf":
-  title: "The Theory Of Island Biogeography An Overview"        # TODO: confirm/replace title
+  title: "The Theory of Island Biogeography: An Overview"
   authors: "Udo Bröring"
+  date: 2014-07-30
+  lang: en
   description: >-
-    TODO: add an abstract or summary for this document.
+    An overview of the equilibrium theory of island biogeography: species–area
+    and species–abundance relations, the theory's main ideas, extensions and
+    applications, and contradicting approaches such as the habitat-heterogeneity
+    and passive-sampling hypotheses, with examples and case studies.
 
 "Voraussetzungen und Auswirkungen der Evolutionstheorie.pdf":
-  title: "Voraussetzungen Und Auswirkungen Der Evolutionstheorie"        # TODO: confirm/replace title
+  title: "Voraussetzungen und Auswirkungen der Evolutionslehre Darwins"
   authors: "Udo Bröring"
+  date: 2009-12-17
+  lang: de
   description: >-
-    TODO: add an abstract or summary for this document.
+    Zum 200. Geburtstag von Charles Darwin: die wissenschaftlichen und
+    geistesgeschichtlichen Voraussetzungen der Evolutionslehre von Darwin und
+    Wallace sowie ihre Auswirkungen auf Naturwissenschaft und das
+    Selbstverständnis des Menschen.

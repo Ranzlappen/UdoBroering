@@ -2,6 +2,7 @@
 layout: page
 title: Disclaimer
 subtitle: The fine print
+description: "The fine print: liability, professional-advice, and external-link disclaimers for the content on this site."
 permalink: /disclaimer/
 ---
 

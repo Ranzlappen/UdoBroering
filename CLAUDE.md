@@ -40,7 +40,8 @@ bundle exec jekyll build        # production build into _site/
   wrong-case baseurl 404s every asset).
 - **Post status**: `status` front-matter field — `published` (default), `draft`,
   `placeholder`, `unpublished`. Only `published` and `placeholder` appear in the
-  feed (`feed.xml`) and sitemap (`sitemap.xml`).
+  feed (`feed.xml`) and sitemap (`sitemap.xml`); `draft` and `unpublished` also
+  render with a `noindex` robots meta (`_includes/head.html`).
 - **Post categories**: singular `category:` field. The exact string `"Projects"`
   routes a post to `/projects/`; everything else lands on `/articles/`. Liquid `==` is
   case-sensitive — keep the casing.
@@ -55,8 +56,10 @@ bundle exec jekyll build        # production build into _site/
 - **Papers (PDFs)**: `pages/papers.html` (`/papers/`) auto-lists every PDF in
   `assets/papers/` by iterating `site.static_files` — drop a PDF in and it appears
   (name it `YYYY-MM-DD-title.pdf` to sort newest-first). Optional richer metadata
-  (`title`, `authors`, `date`, `description`) lives in `_data/papers.yml`, keyed by
-  the exact PDF filename; without an entry the bare filename is used. When a new PDF
+  (`title`, `authors`, `date`, `lang`, `description`) lives in `_data/papers.yml`,
+  keyed by the exact PDF filename; without an entry the bare filename is used. That
+  metadata also drives the `ScholarlyArticle` JSON-LD on `/papers/`, the sitemap
+  `lastmod`, and the search index — filling it in is what makes a paper findable. When a new PDF
   lands on `main`, the deploy workflow's **`prepare`** job runs `script/sync_papers.rb`
   to append a ready-to-fill stub entry for it (date parsed from the filename prefix)
   and commits it back *before* the build — purely a convenience, since the page lists
@@ -90,10 +93,28 @@ bundle exec jekyll build        # production build into _site/
 
 ## SEO
 
-`jekyll-seo-tag` (`{% seo %}` in `_includes/head.html`) plus hand-rolled extras:
-Open Graph + Twitter cards, canonical, JSON-LD (`WebSite` in head; `BlogPosting` +
-`BreadcrumbList` in `_layouts/post.html`), a custom status-filtered `sitemap.xml`
-and Atom `feed.xml`, and `robots.txt`.
+Fully **hand-rolled** in `_includes/head.html` — there is no jekyll-seo-tag; do not
+re-add it, it would duplicate every tag. Invariant: exactly **one** of each per
+page — `<title>` (set in `_layouts/default.html`: "Page — Site"; the homepage gets
+"Site — Tagline"), meta description, canonical, robots meta, Open Graph + Twitter
+cards, and one JSON-LD block per entity (`WebSite` + `Person` with `sameAs` built
+from `site.author.*` handles in head; `BlogPosting` + `BreadcrumbList` in
+`_layouts/post.html`, where breadcrumbs follow the category routing — `"Projects"`
+→ `/projects/`, else `/articles/`).
+
+- **Share images**: `og:image`/`twitter:image` fall back to `site.social_image` when
+  a page has no raster `image` — SVG covers are skipped (no platform renders SVG
+  previews) and the Twitter card drops from `summary_large_image` to `summary`.
+- **Indexability**: `draft`/`unpublished` posts render with `noindex` (and stay out
+  of the sitemap/feed); `404.html`/`offline.html` are `noindex` too; everything else
+  gets `index, follow, max-image-preview:large`.
+- **Papers**: `sitemap.xml` lists every PDF in `assets/papers/` (URI-escaped `loc`,
+  `lastmod` from the `date` in `_data/papers.yml`), and `/papers/` emits
+  `CollectionPage` → `ItemList` → `ScholarlyArticle` JSON-LD from the same metadata.
+- **Verification**: uncomment `google_site_verification` / `bing_site_verification`
+  in `_config.yml` when claiming the site in Google Search Console / Bing Webmaster
+  Tools, then submit `sitemap.xml` there.
+- Plus the custom status-filtered `sitemap.xml`, the Atom `feed.xml`, and `robots.txt`.
 
 ## Deployment & CI/CD
 
