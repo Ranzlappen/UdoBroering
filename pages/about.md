@@ -11,7 +11,7 @@ permalink: /about/
 This is a personal blog — a space for passion projects, random experiments,
 deep dives into things I find interesting, and the occasional hot take on
 something nobody asked about. No single niche, no editorial calendar, just
-genuine curiosity put into words.
+genuine curiosity put into words... 
 
 ## What you'll find here
 
