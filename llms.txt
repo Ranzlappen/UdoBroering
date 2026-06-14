@@ -1,0 +1,35 @@
+---
+layout: null
+# llms.txt (https://llmstxt.org/) — a curated, plain-Markdown map of the site for
+# LLMs and AI search engines (GEO). Liquid-rendered like sitemap.xml/robots.txt so
+# the links and the article list stay in sync with the build. Only published/
+# placeholder posts are listed (same filter as the sitemap and feed).
+---
+# {{ site.title }}
+
+> {{ site.tagline }}
+
+{{ site.description }}
+
+This is a personal, privacy-first blog (no analytics, no tracking) built with Jekyll.
+Content is organised into long-form **articles** (essays on philosophy and the history
+of ideas) and downloadable **papers** (PDFs). Use the links below to read the source.
+
+## Sections
+
+- [Articles]({{ '/articles/' | absolute_url }}): Essays on philosophy — the great thinkers of ancient and modern times.
+- [Papers]({{ '/papers/' | absolute_url }}): Academic papers and longer writings, available as PDFs.
+- [Categories]({{ '/categories/' | absolute_url }}): Browse all writing grouped by topic.
+- [About]({{ '/about/' | absolute_url }}): About {{ site.author.name }} and this site.
+
+## Articles
+{% assign live_posts = site.posts | where_exp: "p", "p.status == 'published' or p.status == 'placeholder'" %}
+{%- for post in live_posts %}
+- [{{ post.title }}]({{ post.url | absolute_url }}){% if post.description %}: {{ post.description | strip_html | normalize_whitespace }}{% elsif post.excerpt %}: {{ post.excerpt | strip_html | normalize_whitespace | truncate: 160 }}{% endif %}
+{%- endfor %}
+
+## Optional
+
+- [RSS / Atom feed]({{ '/feed.xml' | absolute_url }}): Full-content feed of new writing.
+- [Sitemap]({{ '/sitemap.xml' | absolute_url }}): Machine-readable index of every indexable URL.
+- [Privacy]({{ '/privacy/' | absolute_url }}): How this site handles (and avoids collecting) data.

@@ -28,9 +28,13 @@ bundle exec jekyll build        # production build into _site/
 
 ## Key conventions
 
-- **Identity is variable-driven**: `title`, `tagline`, `description`, and `author.*`
-  live in `_config.yml`. Templates, SEO/OG tags, the feed, and the manifest all read
-  these — there is no hardcoded site name in templates. The `/icons/` set is a placeholder Φ; the header shows a Φ glyph (no logo image).
+- **Identity is variable-driven**: `title`, `tagline`, `tagline_short`, `description`,
+  and `author.*` live in `_config.yml`. Templates, SEO/OG tags, the feed, and the
+  manifest all read these — there is no hardcoded site name in templates. `tagline` is
+  the full hero subtitle (also the WebSite JSON-LD `alternateName` and meta-description
+  fallback); `tagline_short` is a trimmed variant used **only** in the homepage
+  `<title>` to keep it within Google's ~60-char SERP limit (falls back to `tagline` if
+  unset). The `/icons/` set is a placeholder Φ; the header shows a Φ glyph (no logo image).
   
 - **Hosting**: custom apex domain **`udobroering.de`** (`CNAME` file) — served at the
   domain root, so `url: https://udobroering.de` and `baseurl: ""`. `sw.js` and
@@ -122,7 +126,7 @@ bundle exec jekyll build        # production build into _site/
 Fully **hand-rolled** in `_includes/head.html` — there is no jekyll-seo-tag; do not
 re-add it, it would duplicate every tag. Invariant: exactly **one** of each per
 page — `<title>` (set in `_layouts/default.html`: "Page — Site"; the homepage gets
-"Site — Tagline"), meta description, canonical, robots meta, Open Graph + Twitter
+"Site — `tagline_short`"), meta description, canonical, robots meta, Open Graph + Twitter
 cards, and one JSON-LD block per entity (`WebSite` + `Person` with `sameAs` built
 from `site.author.*` handles in head; `BlogPosting` + `BreadcrumbList` in
 `_layouts/post.html`, where breadcrumbs follow the category routing — `"Projects"`
@@ -145,6 +149,11 @@ from `site.author.*` handles in head; `BlogPosting` + `BreadcrumbList` in
 - **Verification**: uncomment `google_site_verification` / `bing_site_verification`
   in `_config.yml` when claiming the site in Google Search Console / Bing Webmaster
   Tools, then submit `sitemap.xml` there.
+- **GEO (`llms.txt`)**: a curated, plain-Markdown map for LLMs / AI search engines at
+  the site root (`/llms.txt`, per llmstxt.org). Liquid-rendered (`layout: null`, like
+  `sitemap.xml`/`robots.txt`) so its section links and auto-listed articles stay in
+  sync with the build; it reuses the same published/placeholder post filter as the
+  sitemap and feed.
 - Plus the custom status-filtered `sitemap.xml`, the Atom `feed.xml`, and `robots.txt`.
 
 ## Deployment & CI/CD
@@ -189,7 +198,7 @@ weekly.
 │   ├── vendor/pdfjs/        # Self-hosted PDF.js (Apache-2.0) for the paper reader
 │   ├── papers/              # Published PDFs + covers/ (first-page WebP thumbnails)
 ├── icons/                   # Favicons + PWA icons (placeholders)
-├── feed.xml sitemap.xml search.json robots.txt
+├── feed.xml sitemap.xml search.json robots.txt llms.txt
 ├── site.webmanifest sw.js offline.html 404.html index.html
 └── .github/
     ├── dependabot.yml
