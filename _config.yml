@@ -7,7 +7,11 @@
 # ============================================================
 title: "Udo Bröring"
 tagline: "Essays and papers on the thinkers who shaped how we understand the world."
-description: "Writings on philosophy — the great thinkers of ancient and modern times, their ideas, and why they still matter."
+# Short tagline used ONLY in the homepage <title> ("Site — tagline_short"), to keep
+# it within Google's ~60-char SERP limit. The full `tagline` above still drives the
+# hero subtitle, the WebSite JSON-LD alternateName, and the meta-description fallback.
+tagline_short: "Essays on philosophy's great thinkers"
+description: "Essays and papers on philosophy by Udo Bröring — the great thinkers of ancient and modern times, their ideas and arguments, and why they still matter today."
 url: "https://udobroering.de"
 lang: "en"          # <html lang> + JSON-LD inLanguage (per-post override: lang in front matter)
 locale: "en_US"     # og:locale
