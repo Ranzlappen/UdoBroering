@@ -59,6 +59,17 @@ paginate: 9
 paginate_path: "/articles/page:num/"
 
 # Collections & Defaults
+# The `papers` collection gives every PDF in assets/papers/ its own pages: a
+# library-free landing page (/papers/<slug>/) and a themed PDF.js reader
+# (/papers/<slug>/read/). Each paper has two tiny stub files in _papers/ that
+# carry only the PDF filename + permalink; all human metadata stays single-sourced
+# in _data/papers.yml, looked up by filename. script/sync_papers.rb scaffolds the
+# stubs automatically, so "drop a PDF in assets/papers/ and it appears" still holds.
+collections:
+  papers:
+    output: true
+    permalink: /papers/:name/
+
 defaults:
   - scope:
       path: ""
@@ -71,6 +82,11 @@ defaults:
       type: "pages"
     values:
       layout: "page"
+  - scope:
+      path: ""
+      type: "papers"
+    values:
+      layout: "paper"
 
 # Exclude from build — keep internal files (docs, scripts, brand palette) out
 # of the published site so crawlers only ever see real content.

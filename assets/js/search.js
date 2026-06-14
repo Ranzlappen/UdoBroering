@@ -118,11 +118,8 @@
       var item = document.createElement('a');
       item.className = 'search-result-item';
       item.href = doc.url;
-      if (isPaper) {
-        // Papers are PDFs — open in a new tab, like the /papers/ page does.
-        item.target = '_blank';
-        item.rel = 'noopener';
-      }
+      // Papers now resolve to their landing page (an internal HTML page), so they
+      // open in the same tab like any other result.
 
       var title = document.createElement('h4');
       title.textContent = doc.title;

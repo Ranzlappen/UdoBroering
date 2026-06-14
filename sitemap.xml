@@ -34,6 +34,17 @@ layout: null
     <priority>0.7</priority>
   </url>
   {% endif %}{% endfor %}
+  {% comment %} Paper landing pages (the canonical, indexable entity per paper).
+  The thin reader shell (/papers/<slug>/read/) is noindex and skipped here. {% endcomment %}
+  {% assign paper_landings = site.papers | where_exp: "d", "d.layout != 'paper-reader'" %}
+  {% for doc in paper_landings %}{% assign meta = site.data.papers[doc.pdf] %}
+  <url>
+    <loc>{{ doc.url | absolute_url | xml_escape }}</loc>
+    {% if meta.date %}<lastmod>{{ meta.date | date: "%Y-%m-%d" }}</lastmod>{% endif %}
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  {% endfor %}
   {% comment %} Papers: filenames may contain spaces, so the path must be
   URI-escaped to be a valid sitemap <loc>. {% endcomment %}
   {% assign paper_files = site.static_files | where_exp: "f", "f.path contains '/assets/papers/'" | sort: "name" %}

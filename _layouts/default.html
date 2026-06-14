@@ -1,11 +1,21 @@
+{%- comment -%} Paper pages (the `papers` collection: landing + reader) carry no
+title/description in their stub front matter — those stay single-sourced in
+_data/papers.yml, keyed by the PDF filename. Resolve them here so the <title>
+below and the SEO tags in head.html (which read these vars) pick them up. {%- endcomment -%}
+{%- assign paper_meta = nil -%}
+{%- if page.layout == 'paper' or page.layout == 'paper-reader' -%}
+  {%- assign paper_meta = site.data.papers[page.pdf] -%}
+{%- endif -%}
+{%- assign resolved_title = page.title -%}
+{%- if paper_meta -%}{%- assign resolved_title = paper_meta.title | default: page.pdf -%}{%- endif -%}
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: 'en' }}" dir="ltr">
 <head>
   {%- comment -%} Home gets "Site — tagline_short" (keyword-rich brand query target,
   kept ≤60 chars for SERPs; falls back to the full tagline if unset); every other
-  page gets "Page — Site". Exactly one <title> per page — head.html deliberately
-  emits none. {%- endcomment -%}
-  <title>{% if page.url == "/" %}{{ site.title | escape }} — {{ site.tagline_short | default: site.tagline | escape }}{% elsif page.title %}{{ page.title | escape }} — {{ site.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
+  page gets "Page — Site" (for papers, resolved_title resolves from papers.yml).
+  Exactly one <title> per page — head.html deliberately emits none. {%- endcomment -%}
+  <title>{% if page.url == "/" %}{{ site.title | escape }} — {{ site.tagline_short | default: site.tagline | escape }}{% elsif resolved_title %}{{ resolved_title | escape }} — {{ site.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
   {% include head.html %}
 </head>
 <body class="{% if page.layout == 'post' and page.backdrop %}has-backdrop {% endif %}{% if page.overview_backdrop %}has-overview-backdrop{% endif %}">
@@ -42,6 +52,19 @@
   <script src="{{ '/assets/js/carousel.js' | relative_url }}"></script>
   <!-- Share button (Web Share API + copy-link fallback — local, no consent needed) -->
   <script src="{{ '/assets/js/share.js' | relative_url }}"></script>
+  {% endif %}
+
+  {% if page.layout == 'paper' %}
+  <!-- Citation / BibTeX export (local, no consent needed) -->
+  <script src="{{ '/assets/js/citation.js' | relative_url }}"></script>
+  {% endif %}
+
+  {% if page.layout == 'paper-reader' %}
+  <!-- Custom PDF reader (self-hosted PDF.js — first-party, no consent gate;
+       loads the ~1.4 MB library lazily and only on this page) -->
+  <script type="module" src="{{ '/assets/js/pdf-reader.js' | relative_url }}"></script>
+  <!-- Read Aloud over the extracted PDF text layer (Web Speech API — local) -->
+  <script src="{{ '/assets/js/read-aloud.js' | relative_url }}"></script>
   {% endif %}
 
   <!-- Chart.js (CDN — consent-gated) + declarative initializer -->

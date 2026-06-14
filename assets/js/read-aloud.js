@@ -25,6 +25,7 @@
 
   // --- State ---
   var sentences = [];
+  var readLang = document.documentElement.lang || 'en';
   var currentIndex = -1;
   var isPaused = false;
   var isStopping = false;
@@ -49,10 +50,15 @@
     }
   }
 
-  // --- Extract text from post body, ignoring links/images/nav ---
+  // --- Extract text from the post body (or a paper's extracted text layer),
+  //     ignoring links/images/nav ---
   function extractSentences() {
-    var body = document.querySelector('.post-body[itemprop="articleBody"]');
+    // Posts expose .post-body[itemprop="articleBody"]; the PDF reader fills a
+    // hidden [data-read-aloud-source] container with the document's text.
+    var body = document.querySelector('.post-body[itemprop="articleBody"]')
+            || document.querySelector('[data-read-aloud-source]');
     if (!body) return [];
+    readLang = body.getAttribute('lang') || document.documentElement.lang || 'en';
 
     var result = [];
     var walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
@@ -202,7 +208,7 @@
     // Set voice
     var selectedVoice = getSelectedVoice();
     if (selectedVoice) utterance.voice = selectedVoice;
-    utterance.lang = 'en';
+    utterance.lang = readLang;
 
     utterance.onend = function () {
       if (!isStopping) {

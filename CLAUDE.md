@@ -57,27 +57,53 @@ bundle exec jekyll build        # production build into _site/
   header, mobile nav, and footer. `menu: [main]`, `[footer]`, or `[main, footer]`.
 - **Series**: define in `_data/series.yml`; a post opts in with `series:` +
   `series_order:` and gets a “Part X of Y” navigator (`_includes/series-nav.html`).
-- **Papers (PDFs)**: `pages/papers.html` (`/papers/`) auto-lists every PDF in
-  `assets/papers/` by iterating `site.static_files` — drop a PDF in and it appears
-  (name it `YYYY-MM-DD-title.pdf` to sort newest-first). Optional richer metadata
-  (`title`, `authors`, `date`, `lang`, `description`) lives in `_data/papers.yml`,
-  keyed by the exact PDF filename; without an entry the bare filename is used. That
-  metadata also drives the `ScholarlyArticle` JSON-LD on `/papers/`, the sitemap
-  `lastmod`, and the search index — filling it in is what makes a paper findable. When a new PDF
-  lands on `main`, the deploy workflow's **`prepare`** job runs `script/sync_papers.rb`
-  to append a ready-to-fill stub entry for it (date parsed from the filename prefix)
-  and commits it back *before* the build — purely a convenience, since the page lists
-  the PDF regardless. Run it locally any time with `ruby script/sync_papers.rb`.
+- **Papers (PDFs)**: each PDF in `assets/papers/` is a doc in the **`papers`
+  collection** (`_papers/`, configured in `_config.yml`) and gets two pages: a
+  **landing page** `/papers/<slug>/` (`_layouts/paper.html` — metadata, cover,
+  abstract, "Read online" + "Download PDF" CTAs, a BibTeX/citation block, and
+  per-paper `ScholarlyArticle` JSON-LD) and a **themed reader** `/papers/<slug>/read/`
+  (`_layouts/paper-reader.html` — see "PDF reader" below). The stub docs in
+  `_papers/` carry only `pdf:` (the exact filename) + `slug`/`permalink`; **all human
+  metadata is single-sourced in `_data/papers.yml`**, keyed by the PDF filename, and
+  resolved by filename at render time (also in `_includes/head.html`/`default.html`
+  for the per-paper `<title>`, meta description, and `og:image`). Fields: `title`,
+  `authors`, `date`, `lang`, `description`, and `cover` (a first-page WebP thumbnail —
+  without it a document icon is shown). `/papers/` (`pages/papers.html`) lists the
+  collection, newest-first by the abstract's `date`. To add a paper: drop the PDF in
+  `assets/papers/` and run **`ruby script/sync_papers.rb`** — it scaffolds the two
+  `_papers/` stubs *and* a ready-to-fill `papers.yml` entry. The deploy workflow's
+  **`prepare`** job runs the same script and commits the result before the build.
+  Optional covers: **`bash script/gen_paper_covers.sh`** (needs `pdftoppm` + `cwebp`
+  locally — not in CI) renders `/assets/papers/covers/<slug>.webp` and prints the
+  `cover:` lines to paste into `papers.yml`.
+- **PDF reader**: the reader page mounts a custom, themed viewer built on
+  **self-hosted PDF.js** (`assets/vendor/pdfjs/`, Apache-2.0, version-pinned in
+  `VERSION`) driven by `assets/js/pdf-reader.js` (an ES module). Because it's
+  first-party there is **no cookie-consent gate**; the ~1.4 MB library is **lazy-loaded
+  only on `/read/` pages** (loaded via the `layout == 'paper-reader'` branch in
+  `_layouts/default.html`). Features: continuous-scroll rendering, selectable text
+  layer, page nav, zoom/fit, find-in-document (highlights matches), a night/invert
+  toggle (`localStorage.pdfNight`), and read-aloud TTS — the module extracts the text
+  layer into a hidden `[data-read-aloud-source]` element that the shared
+  `assets/js/read-aloud.js` engine reads (generalized to honor the source's `lang`).
+  Graceful degradation: the server-rendered page shows a Download / Open-raw fallback
+  that's only removed once PDF.js renders, so no-JS or a failed load still works. The
+  thin reader shell is `noindex` (the landing page is the canonical, indexable entity).
+  To bump PDF.js: re-vendor `pdf.min.mjs` + `pdf.worker.min.mjs` + `pdf_viewer.css`
+  (trimmed to the `.textLayer` rules) + `LICENSE`, update `VERSION`, bump
+  `CACHE_VERSION` in `sw.js`. PDFs are not service-worker cached (the `.pdf` guard in
+  `sw.js` keeps the runtime cache bounded).
 - **Search**: `Ctrl/Cmd+K` modal (`_includes/search-modal.html` + `assets/js/search.js`)
   runs **client-side Lunr** over the Liquid-generated `search.json`, which indexes
-  both **`_posts`** (`type: post`) and the **PDFs in `assets/papers/`** (`type: paper`,
+  both **`_posts`** (`type: post`) and the **`papers` collection** (`type: paper`,
   searchable by title/authors/filename, enriched from `_data/papers.yml`). Paper hits
-  show a "Paper" badge and open the PDF in a new tab. It loads Lunr from a CDN behind
-  the functional-cookie consent gate — keep it that way; do not add a query-time
-  third-party search service.
+  show a "Paper" badge and link to the paper's landing page (in-tab). It loads Lunr
+  from a CDN behind the functional-cookie consent gate — keep it that way; do not add
+  a query-time third-party search service.
 - **Privacy-first**: no analytics, no first-party cookies, no Firebase/Giscus. The
   only consent-gated third parties are the Lunr CDN (search) and the Chart.js CDN
-  (charts on posts). GDPR cookie consent with a functional category.
+  (charts on posts); the PDF reader is **self-hosted** and needs no consent. GDPR
+  cookie consent with a functional category.
 - **Theme**: "Marble & Ink" — charcoal/marble greys with a bronze accent (and an
   oxblood secondary, `--c-accent-2`). **Light "gallery" is the default** (set pre-paint
   in `_includes/head.html` — `data-theme="light"` unless `localStorage.theme === 'dark'`);
@@ -104,7 +130,8 @@ page — `<title>` (set in `_layouts/default.html`: "Page — Site"; the homepag
 cards, and one JSON-LD block per entity (`WebSite` + `Person` with `sameAs` built
 from `site.author.*` handles in head; `BlogPosting` + `BreadcrumbList` in
 `_layouts/post.html`, where breadcrumbs follow the category routing — `"Projects"`
-→ `/projects/`, else `/articles/`).
+→ `/projects/`, else `/articles/`; `ScholarlyArticle` + `BreadcrumbList` in
+`_layouts/paper.html`).
 
 - **Share images**: `og:image`/`twitter:image` fall back to `site.social_image` when
   a page has no raster `image` — SVG covers are skipped (no platform renders SVG
@@ -112,9 +139,13 @@ from `site.author.*` handles in head; `BlogPosting` + `BreadcrumbList` in
 - **Indexability**: `draft`/`unpublished` posts render with `noindex` (and stay out
   of the sitemap/feed); `404.html`/`offline.html` are `noindex` too; everything else
   gets `index, follow, max-image-preview:large`.
-- **Papers**: `sitemap.xml` lists every PDF in `assets/papers/` (URI-escaped `loc`,
-  `lastmod` from the `date` in `_data/papers.yml`), and `/papers/` emits
-  `CollectionPage` → `ItemList` → `ScholarlyArticle` JSON-LD from the same metadata.
+- **Papers**: `sitemap.xml` lists every PDF in `assets/papers/` (URI-escaped `loc`)
+  **and** each paper's landing page `/papers/<slug>/` (the canonical, indexable
+  entity; `lastmod` from the `date` in `_data/papers.yml`). The reader shell
+  `/papers/<slug>/read/` is `noindex` and excluded. `/papers/` emits `CollectionPage`
+  → `ItemList` JSON-LD pointing at the landing pages; each landing page emits its own
+  `ScholarlyArticle` + `BreadcrumbList` (`_layouts/paper.html`), all from the same
+  metadata.
 - **Verification**: uncomment `google_site_verification` / `bing_site_verification`
   in `_config.yml` when claiming the site in Google Search Console / Bing Webmaster
   Tools, then submit `sitemap.xml` there.
@@ -130,9 +161,9 @@ from `site.author.*` handles in head; `BlogPosting` + `BreadcrumbList` in
 One workflow, `.github/workflows/jekyll-gh-pages.yml`, builds with Jekyll and deploys
 to GitHub Pages on push to `main` (and `workflow_dispatch`). One-time setup: *Settings
 → Pages → Source: GitHub Actions*. It runs three jobs:
-- **`prepare`** (`contents: write`) — runs `script/sync_papers.rb` to scaffold
-  `_data/papers.yml` stubs for any new PDFs and commits them back *before* the build,
-  so the deploy reflects them. The commit uses the default `GITHUB_TOKEN`, which does
+- **`prepare`** (`contents: write`) — runs `script/sync_papers.rb` to scaffold the
+  `_papers/` collection stubs (landing + reader) and `_data/papers.yml` stubs for any
+  new PDFs and commits them back *before* the build, so the deploy reflects them. The commit uses the default `GITHUB_TOKEN`, which does
   **not** re-trigger the workflow — keeping it to a single deployment per push (folding
   this in-line avoids the earlier race where a separate sync commit kicked a second,
   colliding Pages deployment). `build` checks out the post-stub commit via the job's
@@ -153,15 +184,19 @@ weekly.
 │   └── papers.yml           # Optional metadata for PDFs in assets/papers/
 ├── _includes/               # head, header, footer, hero, search-modal,
 │                            #   post-card, post-list-item, series-nav, toc
-├── _layouts/                # default, home, page, post
+├── _layouts/                # default, home, page, post, paper, paper-reader
 ├── _posts/                  # Blog content (Markdown)
+├── _papers/                 # papers collection stubs (landing + reader per PDF)
 ├── pages/                   # articles, papers, projects, categories, tags, about, privacy, disclaimer
-├── script/                  # sync_papers.rb (scaffolds _data/papers.yml stubs)
+├── script/                  # sync_papers.rb (scaffolds _papers/ + papers.yml stubs),
+│                            #   gen_paper_covers.sh (local first-page WebP covers)
 ├── assets/
 │   ├── css/                 # style.css, cookie-consent.css
-│   ├── js/                  # main, cookie-consent, search, carousel, charts, read-aloud, share
+│   ├── js/                  # main, cookie-consent, search, carousel, charts, read-aloud,
+│   │                        #   share, pdf-reader, citation
 │   ├── fonts/               # Self-hosted serif woff2 (EB Garamond + Cormorant Garamond)
-│   ├── papers/              # Published PDFs (auto-listed at /papers/)
+│   ├── vendor/pdfjs/        # Self-hosted PDF.js (Apache-2.0) for the paper reader
+│   ├── papers/              # Published PDFs + covers/ (first-page WebP thumbnails)
 ├── icons/                   # Favicons + PWA icons (placeholders)
 ├── feed.xml sitemap.xml search.json robots.txt llms.txt
 ├── site.webmanifest sw.js offline.html 404.html index.html

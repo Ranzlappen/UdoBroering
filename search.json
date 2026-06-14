@@ -20,16 +20,16 @@ layout: null
     "category": {{ post.category | default: "" | jsonify }},
     "tags": {{ post.tags | join: " " | jsonify }}
   }{% endif %}{% endfor %}
-  {% assign papers = site.static_files | where_exp: "f", "f.path contains '/assets/papers/'" | sort: "name" | reverse %}
-  {% for file in papers %}{% assign ext = file.extname | downcase %}{% if ext == ".pdf" %}{% assign meta = site.data.papers[file.name] %}{% unless first %},{% endunless %}{% assign first = false %}
+  {% assign papers = site.papers | where_exp: "d", "d.layout != 'paper-reader'" %}
+  {% for doc in papers %}{% assign meta = site.data.papers[doc.pdf] %}{% unless first %},{% endunless %}{% assign first = false %}
   {
     "type": "paper",
-    "title": {{ meta.title | default: file.basename | jsonify }},
-    "url": "{{ file.path | relative_url }}",
-    "content": {{ meta.description | default: "" | append: " " | append: file.name | strip_html | normalize_whitespace | jsonify }},
+    "title": {{ meta.title | default: doc.pdf | remove: ".pdf" | jsonify }},
+    "url": "{{ doc.url | relative_url }}",
+    "content": {{ meta.description | default: "" | append: " " | append: doc.pdf | strip_html | normalize_whitespace | jsonify }},
     "date": "{% if meta.date %}{{ meta.date | date: '%Y-%m-%d' }}{% endif %}",
     "category": "Paper",
     "authors": {{ meta.authors | default: "" | jsonify }},
     "tags": {{ meta.authors | default: "" | jsonify }}
-  }{% endif %}{% endfor %}
+  }{% endfor %}
 ]
