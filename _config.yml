@@ -7,7 +7,11 @@
 # ============================================================
 title: "Udo Bröring"
 tagline: "Essays and papers on the thinkers who shaped how we understand the world."
-description: "Writings on philosophy — the great thinkers of ancient and modern times, their ideas, and why they still matter."
+# Short tagline used ONLY in the homepage <title> ("Site — tagline_short"), to keep
+# it within Google's ~60-char SERP limit. The full `tagline` above still drives the
+# hero subtitle, the WebSite JSON-LD alternateName, and the meta-description fallback.
+tagline_short: "Essays on philosophy's great thinkers"
+description: "Essays and papers on philosophy by Udo Bröring — the great thinkers of ancient and modern times, their ideas and arguments, and why they still matter today."
 url: "https://udobroering.de"
 lang: "en"          # <html lang> + JSON-LD inLanguage (per-post override: lang in front matter)
 locale: "en_US"     # og:locale
@@ -17,11 +21,13 @@ locale: "en_US"     # og:locale
 # Replace with a real 1200×630 banner when branding lands.
 social_image: "/icons/icon-512.png"
 
-# Search-engine ownership verification — uncomment and paste the token (the
-# content="…" value) when registering at Google Search Console / Bing Webmaster
-# Tools. Submitting sitemap.xml there is the single highest-impact indexing step.
-# google_site_verification: ""
-# bing_site_verification: ""
+# Search-engine ownership verification — paste the token (the content="…" value)
+# from Google Search Console / Bing Webmaster Tools between the quotes. While these
+# stay empty no meta tag is emitted (head.html skips blank values); once a token is
+# set the verification <meta> renders. Submitting sitemap.xml there afterwards is the
+# single highest-impact indexing step.
+google_site_verification: "TbawrijOByIV9zes_IobIVX1sqH5RMACcVVXjbRsev0"
+bing_site_verification: "F77DFE78F7CE09D0DBC60CFB2FA27E51"
 # Custom apex domain (see the CNAME file) — GitHub Pages serves the site at the
 # domain root, so baseurl is empty. (If you ever drop the custom domain and serve
 # from https://ranzlappen.github.io/UdoBroering/ again, set baseurl: "/UdoBroering"

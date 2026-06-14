@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: 'en' }}" dir="ltr">
 <head>
-  {%- comment -%} Home gets "Site — Tagline" (keyword-rich brand query target);
-  every other page gets "Page — Site". Exactly one <title> per page — head.html
-  deliberately emits none. {%- endcomment -%}
-  <title>{% if page.url == "/" %}{{ site.title | escape }} — {{ site.tagline | escape }}{% elsif page.title %}{{ page.title | escape }} — {{ site.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
+  {%- comment -%} Home gets "Site — tagline_short" (keyword-rich brand query target,
+  kept ≤60 chars for SERPs; falls back to the full tagline if unset); every other
+  page gets "Page — Site". Exactly one <title> per page — head.html deliberately
+  emits none. {%- endcomment -%}
+  <title>{% if page.url == "/" %}{{ site.title | escape }} — {{ site.tagline_short | default: site.tagline | escape }}{% elsif page.title %}{{ page.title | escape }} — {{ site.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
   {% include head.html %}
 </head>
 <body class="{% if page.layout == 'post' and page.backdrop %}has-backdrop {% endif %}{% if page.overview_backdrop %}has-overview-backdrop{% endif %}">
