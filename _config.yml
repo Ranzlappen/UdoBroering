@@ -26,8 +26,8 @@ social_image: "/icons/icon-512.png"
 # stay empty no meta tag is emitted (head.html skips blank values); once a token is
 # set the verification <meta> renders. Submitting sitemap.xml there afterwards is the
 # single highest-impact indexing step.
-google_site_verification: ""
-bing_site_verification: ""
+google_site_verification: "TbawrijOByIV9zes_IobIVX1sqH5RMACcVVXjbRsev0"
+bing_site_verification: "F77DFE78F7CE09D0DBC60CFB2FA27E51"
 # Custom apex domain (see the CNAME file) — GitHub Pages serves the site at the
 # domain root, so baseurl is empty. (If you ever drop the custom domain and serve
 # from https://ranzlappen.github.io/UdoBroering/ again, set baseurl: "/UdoBroering"
