@@ -23,7 +23,9 @@ of ideas) and downloadable **papers** (PDFs). Use the links below to read the so
 - [About]({{ '/about/' | absolute_url }}): About {{ site.author.name }} and this site.
 
 ## Articles
-{% assign live_posts = site.posts | where_exp: "p", "p.status == 'published' or p.status == 'placeholder'" %}
+{% assign published_posts = site.posts | where: "status", "published" %}
+{% assign placeholder_posts = site.posts | where: "status", "placeholder" %}
+{% assign live_posts = published_posts | concat: placeholder_posts | sort: "date" | reverse %}
 {%- for post in live_posts %}
 - [{{ post.title }}]({{ post.url | absolute_url }}){% if post.description %}: {{ post.description | strip_html | normalize_whitespace }}{% elsif post.excerpt %}: {{ post.excerpt | strip_html | normalize_whitespace | truncate: 160 }}{% endif %}
 {%- endfor %}
