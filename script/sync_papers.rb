@@ -1,27 +1,29 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Scaffold stub metadata entries in _data/papers.yml for any PDF in
-# assets/papers/ that isn't keyed yet.
+# Scaffold the per-PDF Jekyll pages and metadata for any PDF in assets/papers/
+# that isn't wired up yet. Two things get scaffolded:
 #
-# The /papers/ page already auto-lists every PDF whether or not it has a
-# papers.yml entry, so this is purely a convenience: it gives you a
-# ready-to-fill template (with the date pre-parsed from a YYYY-MM-DD filename
-# prefix) instead of having to remember the filename-as-key syntax.
+#   1. The `papers` collection stubs in _papers/ — two tiny files per PDF: the
+#      landing page (_papers/<slug>.md → /papers/<slug>/) and the PDF.js reader
+#      (_papers/<slug>-read.md → /papers/<slug>/read/). These are what give each
+#      PDF its own page; they carry only the filename + permalink.
+#   2. A ready-to-fill metadata stub in _data/papers.yml (with the date pre-parsed
+#      from a YYYY-MM-DD filename prefix). All human metadata lives here, keyed by
+#      the exact PDF filename, so it stays single-sourced.
 #
-# Existing entries and the file's leading comments are left untouched — new
-# stubs are appended to the end of the file, so nothing you've already filled
-# in gets clobbered or reordered.
+# Existing files and the data file's leading comments are left untouched.
 #
 # Usage:  ruby script/sync_papers.rb
-# Exits 0 always; prints the names it added (if any) to stdout.
+# Exits 0 always; prints what it created (if anything) to stdout.
 
 require "yaml"
 require "date"
 
-ROOT        = File.expand_path("..", __dir__)
-PAPERS_DIR  = File.join(ROOT, "assets", "papers")
-DATA_FILE   = File.join(ROOT, "_data", "papers.yml")
+ROOT           = File.expand_path("..", __dir__)
+PAPERS_DIR     = File.join(ROOT, "assets", "papers")
+DATA_FILE      = File.join(ROOT, "_data", "papers.yml")
+COLLECTION_DIR = File.join(ROOT, "_papers")
 DEFAULT_AUTHOR = "Udo Bröring"
 
 # --- gather the PDFs on disk -------------------------------------------------
@@ -32,6 +34,49 @@ pdfs = Dir.children(PAPERS_DIR)
 if pdfs.empty?
   puts "No PDFs in assets/papers/ — nothing to do."
   exit 0
+end
+
+# Slug = slugify(PDF basename), matching the permalinks in the _papers/ stubs
+# (Jekyll's default slugify keeps stop-words; German umlauts are transliterated).
+def slugify(name)
+  s = File.basename(name, ".*").sub(/\A\d{4}-\d{2}-\d{2}-/, "")
+  s = s.gsub("ö", "oe").gsub("ä", "ae").gsub("ü", "ue")
+       .gsub("Ö", "Oe").gsub("Ä", "Ae").gsub("Ü", "Ue").gsub("ß", "ss")
+  s.downcase.gsub(/[^a-z0-9]+/, "-").gsub(/\A-+|-+\z/, "")
+end
+
+# --- scaffold the collection stubs (landing + reader) ------------------------
+Dir.mkdir(COLLECTION_DIR) unless Dir.exist?(COLLECTION_DIR)
+created_stubs = []
+pdfs.each do |name|
+  slug = slugify(name)
+  landing = File.join(COLLECTION_DIR, "#{slug}.md")
+  reader  = File.join(COLLECTION_DIR, "#{slug}-read.md")
+  unless File.exist?(landing)
+    File.write(landing, <<~MD)
+      ---
+      pdf: "#{name}"
+      slug: #{slug}
+      permalink: /papers/#{slug}/
+      ---
+    MD
+    created_stubs << "_papers/#{slug}.md"
+  end
+  unless File.exist?(reader)
+    File.write(reader, <<~MD)
+      ---
+      pdf: "#{name}"
+      slug: #{slug}
+      layout: paper-reader
+      permalink: /papers/#{slug}/read/
+      ---
+    MD
+    created_stubs << "_papers/#{slug}-read.md"
+  end
+end
+unless created_stubs.empty?
+  puts "Created #{created_stubs.size} collection stub(s):"
+  created_stubs.each { |s| puts "  + #{s}" }
 end
 
 # --- read the keys already present in papers.yml -----------------------------

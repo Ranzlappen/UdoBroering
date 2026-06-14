@@ -13,8 +13,13 @@
   renders SVG previews); pages without a usable raster fall back to
   site.social_image with a small "summary" card instead of a large one.
 {%- endcomment -%}
+{%- comment -%} Paper pages: resolved_title + paper_meta come from _layouts/default.html
+(metadata is single-sourced in _data/papers.yml). Use the abstract as the meta
+description and the pre-generated WebP cover as the share image. {%- endcomment -%}
 {%- assign og_image = nil -%}
-{%- if page.image -%}
+{%- if paper_meta and paper_meta.cover -%}
+  {%- assign og_image = paper_meta.cover -%}
+{%- elsif page.image -%}
   {%- assign img_ext = page.image | split: "." | last | downcase -%}
   {%- unless img_ext == "svg" -%}{%- assign og_image = page.image -%}{%- endunless -%}
 {%- endif -%}
@@ -23,14 +28,18 @@
   {%- assign og_image = site.social_image -%}
   {%- assign og_image_is_fallback = true -%}
 {%- endunless -%}
-{%- assign meta_title = page.title | default: site.title -%}
+{%- assign meta_title = resolved_title | default: page.title | default: site.title -%}
 {%- if page.url == "/" -%}{%- assign meta_title = site.title -%}{%- endif -%}
-{%- assign meta_description = page.description | default: page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 300 -%}
+{%- assign meta_description = nil -%}
+{%- if paper_meta -%}{%- assign meta_description = paper_meta.description -%}{%- endif -%}
+{%- assign meta_description = meta_description | default: page.description | default: page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 300 -%}
 
 <meta name="description" content="{{ meta_description | escape }}">
 <meta name="author" content="{{ site.author.name | escape }}">
-{% if page.status == "draft" or page.status == "unpublished" -%}
-<meta name="robots" content="noindex">
+{% if page.status == "draft" or page.status == "unpublished" or page.layout == "paper-reader" -%}
+{%- comment -%} The reader shell is a thin app page; the landing page (/papers/<slug>/)
+is the canonical indexable entity for each paper. {%- endcomment -%}
+<meta name="robots" content="noindex, follow">
 {%- else -%}
 <meta name="robots" content="index, follow, max-image-preview:large">
 {%- endif %}
@@ -143,6 +152,9 @@
 <!-- CSS -->
 <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/css/cookie-consent.css' | relative_url }}">
+{%- comment -%} Reader pages only: the trimmed PDF.js text-layer CSS that positions
+the invisible, selectable text spans over each rendered page. {%- endcomment -%}
+{% if page.layout == 'paper-reader' %}<link rel="stylesheet" href="{{ '/assets/vendor/pdfjs/pdf_viewer.css' | relative_url }}">{% endif %}
 
 <!-- Theme: apply saved preference before paint to prevent flash -->
 <!-- Cookie consent: read saved state before any scripts run -->

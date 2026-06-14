@@ -2,7 +2,9 @@ _site/
 .sass-cache/
 .jekyll-cache/
 .jekyll-metadata
-vendor/
+# Anchored to the repo root so it only ignores the top-level bundler dir
+# (bundle install --path vendor), NOT the vendored libraries in assets/vendor/.
+/vendor/
 .bundle/
 node_modules/
 Gemfile.lock

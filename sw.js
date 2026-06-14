@@ -7,7 +7,7 @@ layout: null
    No build step, no Workbox. Bump CACHE_VERSION to invalidate. */
 "use strict";
 
-const CACHE_VERSION = "udoblog-v14";
+const CACHE_VERSION = "udoblog-v15";
 const PRECACHE = CACHE_VERSION + "-precache";
 const RUNTIME = CACHE_VERSION + "-runtime";
 
@@ -111,7 +111,15 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Other static assets (images, fonts, etc.): cache-first, then network.
+  // PDFs can be large (papers run to ~1 MB each); leave them to the browser so
+  // the runtime cache doesn't balloon. The self-hosted PDF.js library (.mjs) is
+  // small and immutable, so it still gets cache-first below.
+  if (url.pathname.endsWith(".pdf")) {
+    return;
+  }
+
+  // Other static assets (images, fonts, the vendored .mjs library, etc.):
+  // cache-first, then network.
   event.respondWith(
     caches.match(req).then((hit) => {
       if (hit) return hit;

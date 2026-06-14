@@ -7,7 +7,10 @@
 # sitemap <lastmod> and the ScholarlyArticle datePublished), description (used
 # as the visible blurb, the search index, and the JSON-LD abstract — write it
 # in the paper's own language), lang (BCP-47 code, e.g. "en" / "de", used as
-# the JSON-LD inLanguage).
+# the JSON-LD inLanguage), cover (path to a first-page WebP thumbnail, e.g.
+# /assets/papers/covers/<slug>.webp — shown on the /papers/ cards and the paper's
+# landing page, and used as its og:image; without it a document icon is shown.
+# Generate covers with: bash script/gen_paper_covers.sh).
 #
 # Tip: name files like  YYYY-MM-DD-short-title.pdf  so they sort newest-first.
 
