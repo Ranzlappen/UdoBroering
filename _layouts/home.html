@@ -1,13 +1,40 @@
 ---
 layout: default
-# Landing page is a lean "hub": the hero + three buttons (Blog / Projects /
-# References) only — no article cards are linked here, to keep the first paint
-# fast and the next click cheap. After the page finishes loading we warm the
-# browser cache with every post's hero/cover image (see the preloader below) so
-# the Blog / Projects pages render their images near-instantly.
+# Landing page is a lean "hub": the hero + buttons, then a short text-only intro
+# section (`.home-intro`) — no article cards are linked here, to keep the first
+# paint fast and the next click cheap. The intro adds H2 headings and indexable
+# prose for SEO/GEO without images, so it doesn't slow first paint. After the page
+# finishes loading we warm the browser cache with every post's hero/cover image
+# (see the preloader below) so the Blog / Projects pages render images near-instantly.
 ---
 
 {% include hero.html %}
+
+{% comment %}
+  Short on-brand intro below the hero. Its job is SEO/GEO: it gives the otherwise
+  minimal landing page real heading hierarchy (H2s) and indexable text, and links
+  into the two main sections. Copy is a placeholder draft (tracked for a rewrite) —
+  text only, so the fast first paint is preserved.
+{% endcomment %}
+<section class="home-intro" aria-labelledby="home-intro-title">
+  <p class="home-intro__lead">Essays and papers on philosophy — the questions that have
+     occupied the great thinkers from antiquity to the present, and why they still shape
+     how we understand the world.</p>
+
+  <h2 id="home-intro-title">Essays and papers</h2>
+  <p>This site gathers two kinds of writing: long-form essays that follow a single idea
+     wherever it leads, and longer academic papers you can read online or download as a
+     PDF. Both trace how thinkers ancient and modern have asked what we can know, how we
+     ought to live, and what it means to understand the world around us.</p>
+
+  <h2>Why the old questions still matter</h2>
+  <p>Philosophy is not a museum. The arguments that shaped earlier ages keep returning
+     because the questions behind them are still ours — about knowledge, nature, ethics,
+     and meaning. These pages revisit the great thinkers not as relics but as conversation
+     partners, read closely enough to see why their ideas endure. Start with the
+     <a href="{{ '/articles/' | relative_url }}">essays</a> or browse the
+     <a href="{{ '/papers/' | relative_url }}">papers</a>.</p>
+</section>
 
 {% comment %}
   Hero/cover image preload list — every published/placeholder post's `image`

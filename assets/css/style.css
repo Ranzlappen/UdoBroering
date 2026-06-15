@@ -531,6 +531,33 @@ html[data-header-sticky="off"] .theme-toggle {
   font-size: 0.95rem;
 }
 
+/* Homepage intro — short on-brand prose below the hero. Adds H2 structure and
+   indexable text to the otherwise lean landing page (SEO/GEO). Text only, so it
+   keeps the fast first paint. Uses existing tokens → auto-themes dark/light. */
+.home-intro {
+  max-width: var(--content-width);          /* 48rem reading width */
+  margin: 0 auto;
+  padding: var(--space-3xl) var(--space-lg);
+  border-top: 1px solid var(--c-border);
+}
+.home-intro__lead {
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  color: var(--c-text-muted);
+  line-height: 1.6;
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+.home-intro h2 {
+  font-family: var(--f-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.home-intro h2:first-of-type { margin-top: 0; }
+.home-intro p { line-height: 1.7; margin-bottom: var(--space-md); }
+.home-intro a { color: var(--c-accent); text-underline-offset: 2px; }
+
 /* ============================================================
    Main Content
    ============================================================ */
